@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - TurfZone{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .payment-page {
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .payment-header h1 {
+        font-size: 34px;
+        margin-bottom: 8px;
+    }
+
+    .payment-header p {
+        color: #777;
+    }
+
+    .payment-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eee;
+    }
+
+    .card h2 {
+        margin-top: 0;
+        margin-bottom: 22px;
+        font-size: 21px;
+    }
+
+    .booking-detail {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 13px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .booking-detail:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #777;
+    }
+
+    .detail-value {
+        font-weight: 600;
+        text-align: right;
+    }
+
+    .total-box {
+        margin-top: 20px;
+        padding: 18px;
+        border-radius: 12px;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .total-label {
+        font-weight: 700;
+    }
+
+    .total-price {
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .payment-method {
+        display: block;
+        margin-bottom: 13px;
+        cursor: pointer;
+    }
+
+    .payment-method input {
+        display: none;
+    }
+
+    .method-content {
+        border: 2px solid #eee;
+        border-radius: 12px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: 0.2s ease;
+    }
+
+    .method-icon {
+        font-size: 24px;
+    }
+
+    .method-info {
+        flex: 1;
+    }
+
+    .method-name {
+        font-weight: 700;
+        margin-bottom: 3px;
+    }
+
+    .method-description {
+        color: #777;
+        font-size: 12px;
+    }
+
+    .payment-method input:checked + .method-content {
+        border-color: #111;
+        background: #f7f7f7;
+    }
+
+    .pay-button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        background: #111;
+        color: white;
+        font-size: 16px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .pay-button:hover {
+        background: #333;
+        transform: translateY(-1px);
+    }
+
+    .secure-payment {
+        text-align: center;
+        margin-top: 15px;
+        color: #777;
+        font-size: 12px;
+    }
+
+    .demo-note {
+        margin-top: 18px;
+        padding: 13px;
+        background: #fff8e6;
+        border: 1px solid #ffe1a3;
+        border-radius: 10px;
+        font-size: 12px;
+        color: #795900;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 700px) {
+
+        .payment-container {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-page {
+            margin: 30px auto;
+        }
+
+        .payment-header h1 {
+            font-size: 28px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="payment-page">
+
+    <!-- HEADER -->
+
+    <div class="payment-header">
+
+        <h1>Complete Payment</h1>
+
+        <p>
+            Secure your turf booking by completing the payment.
+        </p>
+
+    </div>
+
+
+    <div class="payment-container">
+
+        <!-- ==========================================
+             BOOKING SUMMARY
+        =========================================== -->
+
+        <div class="card">
+
+            <h2>
+                Booking Summary
+            </h2>
+
+
+            <div class="booking-detail">
+
+                <span class="detail-label">
+                    Turf
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.turf_name }}
+                </span>
+
+            </div>
+
+
+            <div class="booking-detail">
+
+                <span class="detail-label">
+                    Sport
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.sport_type }}
+                </span>
+
+            </div>
+
+
+            <div class="booking-detail">
+
+                <span class="detail-label">
+                    Location
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.location }}
+                </span>
+
+            </div>
+
+
+            <div class="booking-detail">
+
+                <span class="detail-label">
+                    Date
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.booking_date }}
+                </span>
+
+            </div>
+
+
+            <div class="booking-detail">
+
+                <span class="detail-label">
+                    Start Time
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.start_time }}
+                </span>
+
+            </div>
+
+
+            <div class="booking-detail">
+
+                <span class="detail-label">
+                    Duration
+                </span>
+
+                <span class="detail-value">
+                    {{ booking.duration }}
+                    hour{% if booking.duration != 1 %}s{% endif %}
+                </span>
+
+            </div>
+
+
+            <div class="total-box">
+
+                <span class="total-label">
+                    Total Amount
+                </span>
+
+                <span class="total-price">
+                    ₹{{ "%.2f"|format(booking.total_price) }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             PAYMENT OPTIONS
+        =========================================== -->
+
+        <div class="card">
+
+            <h2>
+                Select Payment Method
+            </h2>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('initiate_payment', booking_id=booking.id) }}"
+            >
+
+                <!-- UPI -->
+
+                <label class="payment-method">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="UPI"
+                        required
+                    >
+
+                    <div class="method-content">
+
+                        <div class="method-icon">
+                            📱
+                        </div>
+
+                        <div class="method-info">
+
+                            <div class="method-name">
+                                UPI
+                            </div>
+
+                            <div class="method-description">
+                                Google Pay, PhonePe, Paytm
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- CARD -->
+
+                <label class="payment-method">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="Card"
+                    >
+
+                    <div class="method-content">
+
+                        <div class="method-icon">
+                            💳
+                        </div>
+
+                        <div class="method-info">
+
+                            <div class="method-name">
+                                Credit / Debit Card
+                            </div>
+
+                            <div class="method-description">
+                                Visa, Mastercard and other cards
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- NET BANKING -->
+
+                <label class="payment-method">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="Net Banking"
+                    >
+
+                    <div class="method-content">
+
+                        <div class="method-icon">
+                            🏦
+                        </div>
+
+                        <div class="method-info">
+
+                            <div class="method-name">
+                                Net Banking
+                            </div>
+
+                            <div class="method-description">
+                                Pay using your bank account
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <!-- PAY BUTTON -->
+
+                <button
+                    type="submit"
+                    class="pay-button"
+                >
+                    💳 Pay ₹{{ "%.2f"|format(booking.total_price) }}
+                </button>
+
+
+                <div class="secure-payment">
+                    🔒 Secure Demo Payment
+                </div>
+
+
+                <div class="demo-note">
+
+                    <strong>Demo Mode:</strong>
+
+                    This is a simulated payment gateway created
+                    for the TurfZone mini project. No real money
+                    will be transferred.
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

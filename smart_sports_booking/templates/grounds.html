@@ -1,0 +1,2032 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Grounds | TurfZone{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   TURFZONE CINEMATIC INTRO
+   ============================================================ */
+
+#turf-intro {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #020617;
+    animation: introExit 1s ease 4.8s forwards;
+    pointer-events: all;
+}
+
+/* Background */
+
+.intro-bg {
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 50% 55%,
+            rgba(34,197,94,0.25),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(56,189,248,0.18),
+            transparent 55%
+        ),
+        linear-gradient(
+            180deg,
+            #020617 0%,
+            #031a12 55%,
+            #000 100%
+        );
+}
+
+/* Stadium lights */
+
+.intro-light {
+    position: absolute;
+    top: -20%;
+    width: 180px;
+    height: 150%;
+    opacity: 0;
+    filter: blur(18px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.9),
+            rgba(56,189,248,0.15),
+            transparent
+        );
+}
+
+.intro-light.left {
+    left: 8%;
+    transform: rotate(18deg);
+    animation: lightAppear 1s ease 0.2s forwards;
+}
+
+.intro-light.right {
+    right: 8%;
+    transform: rotate(-18deg);
+    animation: lightAppear 1s ease 0.45s forwards;
+}
+
+/* Turf field */
+
+.intro-field {
+    position: absolute;
+
+    width: 85vw;
+    height: 55vh;
+    max-width: 1300px;
+
+    border: 3px solid rgba(74,222,128,0.7);
+    border-radius: 15px;
+
+    transform:
+        perspective(900px)
+        rotateX(58deg)
+        translateY(280px)
+        scale(0.15);
+
+    opacity: 0;
+
+    box-shadow:
+        0 0 35px rgba(34,197,94,0.4),
+        inset 0 0 80px rgba(34,197,94,0.1);
+
+    animation:
+        fieldAppear
+        1.5s
+        cubic-bezier(.16,1,.3,1)
+        0.4s
+        forwards;
+}
+
+.field-horizontal {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: rgba(255,255,255,0.6);
+}
+
+.field-vertical {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: rgba(255,255,255,0.6);
+}
+
+.field-center {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    border:
+        2px solid rgba(255,255,255,0.6);
+
+    border-radius: 50%;
+}
+
+.field-box {
+    position: absolute;
+    top: 25%;
+    width: 15%;
+    height: 50%;
+    border: 2px solid rgba(255,255,255,0.45);
+}
+
+.field-box.left {
+    left: 0;
+}
+
+.field-box.right {
+    right: 0;
+}
+
+
+/* Football */
+
+.intro-football {
+    position: absolute;
+    left: -150px;
+    bottom: 25%;
+
+    z-index: 20;
+
+    font-size: 100px;
+
+    opacity: 0;
+
+    filter:
+        drop-shadow(
+            0 15px 25px rgba(0,0,0,0.9)
+        );
+
+    animation:
+        footballMove
+        2.6s
+        cubic-bezier(.15,.75,.2,1)
+        0.9s
+        forwards;
+}
+
+
+/* Particles */
+
+.intro-particles {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+
+    background-image:
+        radial-gradient(
+            circle,
+            rgba(56,189,248,0.9) 1px,
+            transparent 2px
+        );
+
+    background-size: 55px 55px;
+
+    animation:
+        particlesAppear
+        2s
+        ease
+        1.2s
+        forwards;
+}
+
+
+/* Logo */
+
+.intro-content {
+    position: absolute;
+    z-index: 50;
+
+    text-align: center;
+
+    opacity: 0;
+
+    transform:
+        scale(0.5)
+        translateY(50px);
+
+    animation:
+        logoAppear
+        1.2s
+        cubic-bezier(.16,1,.3,1)
+        2s
+        forwards;
+}
+
+.turfzone-title {
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size:
+        clamp(4rem, 11vw, 10rem);
+
+    font-weight: 900;
+
+    letter-spacing: 12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #38bdf8,
+            #60a5fa,
+            #22c55e
+        );
+
+    background-size: 300%;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow:
+        0 0 15px rgba(56,189,248,0.8),
+        0 0 50px rgba(34,197,94,0.5);
+
+    animation:
+        colorMove
+        2s
+        linear
+        2.3s
+        infinite;
+}
+
+.turfzone-subtitle {
+    color: white;
+
+    font-size:
+        clamp(0.9rem, 2vw, 1.5rem);
+
+    font-weight: 600;
+
+    letter-spacing: 8px;
+
+    margin-top: 5px;
+}
+
+.turfzone-line {
+    width: 0;
+    height: 3px;
+
+    margin: 25px auto;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #38bdf8
+        );
+
+    box-shadow:
+        0 0 20px rgba(56,189,248,0.8);
+
+    animation:
+        lineGrow
+        0.8s
+        ease
+        2.8s
+        forwards;
+}
+
+.turfzone-tagline {
+    color: #38bdf8;
+
+    font-size: 0.9rem;
+
+    font-weight: 700;
+
+    letter-spacing: 6px;
+
+    opacity: 0;
+
+    animation:
+        taglineAppear
+        0.7s
+        ease
+        3.2s
+        forwards;
+}
+
+
+/* Flash */
+
+.intro-flash {
+    position: absolute;
+    inset: 0;
+
+    background: white;
+
+    opacity: 0;
+
+    z-index: 100;
+
+    pointer-events: none;
+
+    animation:
+        flash
+        0.5s
+        ease
+        4.2s
+        forwards;
+}
+
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.page-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+    padding: 20px 0;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+
+    background:
+        linear-gradient(
+            -45deg,
+            rgba(56,189,248,0.2),
+            rgba(96,165,250,0.1),
+            rgba(59,130,246,0.15),
+            rgba(56,189,248,0.1),
+            rgba(96,165,250,0.2)
+        );
+
+    border-radius: 20px;
+
+    margin-bottom: 40px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        2px solid rgba(56,189,248,0.3);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            ellipse at top,
+            rgba(56,189,248,0.1),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+
+    margin:
+        0 0 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #38bdf8,
+            #60a5fa,
+            #818cf8
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-weight: 800;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+
+.hero-description {
+    font-size: 1rem;
+    color: #94a3b8;
+
+    max-width: 600px;
+
+    margin: auto;
+
+    line-height: 1.8;
+}
+
+.hero-icons {
+    display: flex;
+    justify-content: center;
+
+    gap: 20px;
+
+    margin-top: 30px;
+
+    flex-wrap: wrap;
+}
+
+.icon-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background:
+        rgba(56,189,248,0.15);
+
+    border:
+        1px solid rgba(56,189,248,0.3);
+
+    padding:
+        8px 16px;
+
+    border-radius: 50px;
+
+    color: #38bdf8;
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
+.filters-container {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(30,41,59,0.8),
+            rgba(15,23,42,0.8)
+        );
+
+    border:
+        1px solid rgba(56,189,248,0.2);
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    margin-bottom: 40px;
+
+    backdrop-filter: blur(10px);
+}
+
+.filters-title {
+    font-size: 1.3rem;
+
+    font-weight: 700;
+
+    color: #f8fafc;
+
+    margin-bottom: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.filters-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(220px, 1fr)
+        );
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #38bdf8;
+    font-size: 0.9rem;
+}
+
+.filter-group input,
+.filter-group select {
+    background:
+        rgba(15,23,42,0.6);
+
+    border:
+        1px solid rgba(56,189,248,0.3);
+
+    color: #f8fafc;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    font-size: 0.95rem;
+
+    transition: 0.3s;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    outline: none;
+
+    border-color: #38bdf8;
+
+    box-shadow:
+        0 0 12px rgba(56,189,248,0.3);
+}
+
+
+/* ============================================================
+   LOCATION
+   ============================================================ */
+
+.location-input-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.location-input-wrapper input {
+    flex: 1;
+    min-width: 0;
+}
+
+.location-btn {
+    border:
+        1px solid rgba(56,189,248,0.45);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(56,189,248,0.18),
+            rgba(14,165,233,0.28)
+        );
+
+    color: #38bdf8;
+
+    padding:
+        0 16px;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.location-btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #38bdf8,
+            #0284c7
+        );
+
+    color: white;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 18px rgba(56,189,248,0.3);
+}
+
+.location-status {
+    min-height: 18px;
+
+    margin-top: 7px;
+
+    font-size: 0.8rem;
+}
+
+.location-status.success {
+    color: #4ade80;
+}
+
+.location-status.error {
+    color: #f87171;
+}
+
+.location-status.loading {
+    color: #38bdf8;
+}
+
+
+/* ============================================================
+   FILTER BUTTONS
+   ============================================================ */
+
+.filter-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-filter {
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #38bdf8
+        );
+
+    border: none;
+
+    padding:
+        12px 24px;
+
+    border-radius: 10px;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    flex: 1;
+}
+
+.btn-filter:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(56,189,248,0.4);
+}
+
+.btn-filter-reset {
+    background:
+        rgba(255,255,255,0.05);
+
+    border:
+        1px solid rgba(255,255,255,0.1);
+
+    color: white;
+
+    flex: 1;
+
+    cursor: pointer;
+
+    padding:
+        12px 24px;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+}
+
+.filter-results-info {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding-top: 15px;
+}
+
+.active-filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.filter-tag {
+    background:
+        rgba(56,189,248,0.15);
+
+    border:
+        1px solid rgba(56,189,248,0.4);
+
+    padding:
+        6px 14px;
+
+    border-radius: 20px;
+
+    font-size: 0.85rem;
+
+    color: #38bdf8;
+}
+
+
+/* ============================================================
+   TURF CARDS
+   ============================================================ */
+
+.grounds-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(320px,1fr)
+        );
+
+    gap: 28px;
+
+    width: 100%;
+}
+
+.ground-card {
+    background:
+        rgba(15,23,42,0.75);
+
+    border:
+        1px solid rgba(56,189,248,0.25);
+
+    border-radius: 20px;
+
+    padding: 24px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    backdrop-filter: blur(12px);
+
+    transition: 0.35s;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.3);
+}
+
+.ground-card:hover {
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(56,189,248,0.8);
+
+    box-shadow:
+        0 20px 40px rgba(56,189,248,0.25);
+}
+
+.card-badge {
+    display: inline-block;
+
+    background:
+        rgba(56,189,248,0.15);
+
+    border:
+        1px solid rgba(56,189,248,0.5);
+
+    color: #38bdf8;
+
+    padding:
+        6px 14px;
+
+    border-radius: 30px;
+
+    font-size: 0.8rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    margin-bottom: 16px;
+}
+
+.card-title {
+    font-size: 1.45rem;
+
+    font-weight: 800;
+
+    color: white;
+
+    margin-bottom: 10px;
+}
+
+.card-location {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #94a3b8;
+
+    margin-bottom: 20px;
+}
+
+.card-price-container {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 6px;
+
+    margin-bottom: 22px;
+}
+
+.card-price {
+    font-size: 2rem;
+
+    font-weight: 900;
+
+    color: #22c55e;
+}
+
+.price-unit {
+    color: #94a3b8;
+}
+
+.btn-book {
+    display: block;
+
+    width: 100%;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #38bdf8,
+            #0284c7
+        );
+
+    color: white;
+
+    font-weight: 700;
+
+    padding:
+        14px 20px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+.btn-book:hover {
+    transform: scale(1.02);
+
+    box-shadow:
+        0 8px 25px rgba(56,189,248,0.5);
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes lightAppear {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.35;
+    }
+
+}
+
+@keyframes fieldAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            perspective(900px)
+            rotateX(58deg)
+            translateY(280px)
+            scale(0.15);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            perspective(900px)
+            rotateX(58deg)
+            translateY(80px)
+            scale(1);
+    }
+
+}
+
+@keyframes footballMove {
+
+    0% {
+        left: -150px;
+        bottom: 27%;
+        opacity: 0;
+        transform: rotate(0deg) scale(0.4);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    45% {
+        left: 35%;
+        bottom: 48%;
+        transform:
+            rotate(650deg)
+            scale(1);
+    }
+
+    65% {
+        left: 50%;
+        bottom: 56%;
+        transform:
+            rotate(1100deg)
+            scale(1.2);
+    }
+
+    85% {
+        left: 51%;
+        bottom: 50%;
+        transform:
+            rotate(1600deg)
+            scale(0.5);
+    }
+
+    100% {
+        left: 50%;
+        bottom: 50%;
+        transform:
+            rotate(1900deg)
+            scale(0.05);
+        opacity: 0;
+    }
+
+}
+
+@keyframes logoAppear {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            scale(0.5)
+            translateY(50px);
+
+        filter: blur(20px);
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            translateY(0);
+
+        filter: blur(0);
+    }
+
+}
+
+@keyframes colorMove {
+
+    from {
+        background-position: 0%;
+    }
+
+    to {
+        background-position: 300%;
+    }
+
+}
+
+@keyframes lineGrow {
+
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 240px;
+    }
+
+}
+
+@keyframes taglineAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+@keyframes particlesAppear {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.25;
+    }
+
+}
+
+@keyframes flash {
+
+    0% {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    85% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+@keyframes introExit {
+
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.12);
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .grounds-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .location-input-wrapper {
+        flex-direction: column;
+    }
+
+    .location-btn {
+        min-height: 44px;
+    }
+
+    .turfzone-title {
+        letter-spacing: 5px;
+    }
+
+    .turfzone-subtitle {
+        letter-spacing: 3px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- ============================================================
+     CINEMATIC INTRO
+     ============================================================ -->
+
+<div id="turf-intro">
+
+    <div class="intro-bg"></div>
+
+    <div class="intro-light left"></div>
+    <div class="intro-light right"></div>
+
+
+    <div class="intro-field">
+
+        <div class="field-horizontal"></div>
+
+        <div class="field-vertical"></div>
+
+        <div class="field-center"></div>
+
+        <div class="field-box left"></div>
+
+        <div class="field-box right"></div>
+
+    </div>
+
+
+    <div class="intro-particles"></div>
+
+
+    <div class="intro-football">
+        ⚽
+    </div>
+
+
+    <div class="intro-content">
+
+        <div class="turfzone-title">
+            TURFZONE
+        </div>
+
+        <div class="turfzone-subtitle">
+            SMART TURF BOOKING SYSTEM
+        </div>
+
+        <div class="turfzone-line"></div>
+
+        <div class="turfzone-tagline">
+            PLAY • BOOK • REPEAT
+        </div>
+
+    </div>
+
+
+    <div class="intro-flash"></div>
+
+</div>
+
+
+<!-- ============================================================
+     MAIN PAGE
+     ============================================================ -->
+
+<div class="page-wrapper">
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                ⚽ Book Premium Sports Turf Near You
+            </h1>
+
+            <p class="hero-subtitle">
+                Reserve Your Perfect Playing Ground
+            </p>
+
+            <p class="hero-description">
+                Real-time slot availability for Football,
+                Cricket, Badminton, Tennis & more.
+                Secure your booking instantly and start playing!
+            </p>
+
+
+            <div class="hero-icons">
+
+                <div class="icon-badge">
+                    ⚡ Instant Booking
+                </div>
+
+                <div class="icon-badge">
+                    💰 Best Prices
+                </div>
+
+                <div class="icon-badge">
+                    📍 Near You
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         FILTERS
+         ======================================================== -->
+
+    <div class="filters-container">
+
+        <div class="filters-title">
+
+            🔍
+
+            <span>
+                Filter Venues
+            </span>
+
+        </div>
+
+
+        <div class="filters-grid">
+
+
+            <!-- SPORT -->
+
+            <div class="filter-group">
+
+                <label for="sportFilter">
+                    Sport Type
+                </label>
+
+                <select id="sportFilter">
+
+                    <option value="">
+                        All Sports
+                    </option>
+
+                    <option value="Football">
+                        Football
+                    </option>
+
+                    <option value="Cricket">
+                        Cricket
+                    </option>
+
+                    <option value="Badminton">
+                        Badminton
+                    </option>
+
+                    <option value="Tennis">
+                        Tennis
+                    </option>
+
+                    <option value="Basketball">
+                        Basketball
+                    </option>
+
+                    <option value="Volleyball">
+                        Volleyball
+                    </option>
+
+                    <option value="Squash">
+                        Squash
+                    </option>
+
+                    <option value="Hockey">
+                        Hockey
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="filter-group">
+
+                <label for="locationFilter">
+                    📍 Location
+                </label>
+
+                <div class="location-input-wrapper">
+
+                    <input
+                        type="text"
+                        id="locationFilter"
+                        placeholder="Search location..."
+                    >
+
+                    <button
+                        type="button"
+                        class="location-btn"
+                        onclick="requestUserLocation()"
+                    >
+                        📍 Use My Location
+                    </button>
+
+                </div>
+
+                <div
+                    id="locationStatus"
+                    class="location-status"
+                ></div>
+
+            </div>
+
+
+            <!-- MIN PRICE -->
+
+            <div class="filter-group">
+
+                <label for="priceMinFilter">
+                    Min Price (₹/hour)
+                </label>
+
+                <input
+                    type="number"
+                    id="priceMinFilter"
+                    placeholder="0"
+                    min="0"
+                >
+
+            </div>
+
+
+            <!-- MAX PRICE -->
+
+            <div class="filter-group">
+
+                <label for="priceMaxFilter">
+                    Max Price (₹/hour)
+                </label>
+
+                <input
+                    type="number"
+                    id="priceMaxFilter"
+                    placeholder="10000"
+                    min="0"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                class="btn-filter"
+                onclick="applyFilters()"
+            >
+                🔎 Apply Filters
+            </button>
+
+            <button
+                class="btn-filter-reset"
+                onclick="resetFilters()"
+            >
+                ↻ Reset
+            </button>
+
+        </div>
+
+
+        <div class="filter-results-info">
+
+            <span id="resultsCount">
+                Showing all venues
+            </span>
+
+        </div>
+
+
+        <div
+            class="active-filters"
+            id="activeFilters"
+        ></div>
+
+    </div>
+
+
+    <!-- ========================================================
+         TURF CARDS
+         ======================================================== -->
+
+    <div
+        class="grounds-grid"
+        id="groundsGrid"
+    >
+
+        {% if grounds %}
+
+            {% for ground in grounds %}
+
+                <div
+                    class="ground-card"
+                    data-sport="{{ ground.sport_type }}"
+                    data-location="{{ ground.location }}"
+                    data-price="{{ ground.price_per_hour or 500 }}"
+                >
+
+                    <div>
+
+                        <span class="card-badge">
+                            {{ ground.sport_type or 'Sports' }}
+                        </span>
+
+                        <h2 class="card-title">
+                            {{ ground.name }}
+                        </h2>
+
+                        <div class="card-location">
+
+                            <span>📍</span>
+
+                            <span>
+                                {{ ground.location }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="card-price-container">
+
+                            <span class="card-price">
+                                ₹{{ ground.price_per_hour or 500 }}
+                            </span>
+
+                            <span class="price-unit">
+                                /hour
+                            </span>
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for('create_booking', ground_id=ground.id) }}"
+                            class="btn-book"
+                        >
+                            Book Now →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div style="font-size:3rem;">
+                    🏟️
+                </div>
+
+                <h3>
+                    No Grounds Found
+                </h3>
+
+                <p>
+                    Check back later or try clearing your filters.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+
+<script>
+
+/* ============================================================
+   LOCATION
+   ============================================================ */
+
+function requestUserLocation() {
+
+    const status =
+        document.getElementById(
+            "locationStatus"
+        );
+
+    const locationInput =
+        document.getElementById(
+            "locationFilter"
+        );
+
+
+    if (!navigator.geolocation) {
+
+        status.textContent =
+            "❌ Location is not supported by your browser.";
+
+        status.className =
+            "location-status error";
+
+        return;
+    }
+
+
+    status.textContent =
+        "📍 Requesting your location...";
+
+    status.className =
+        "location-status loading";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            console.log(
+                "Latitude:",
+                latitude
+            );
+
+            console.log(
+                "Longitude:",
+                longitude
+            );
+
+
+            localStorage.setItem(
+                "turfzone_latitude",
+                latitude
+            );
+
+            localStorage.setItem(
+                "turfzone_longitude",
+                longitude
+            );
+
+
+            locationInput.value =
+                latitude.toFixed(5)
+                + ", "
+                + longitude.toFixed(5);
+
+
+            status.textContent =
+                "✓ Location detected successfully";
+
+            status.className =
+                "location-status success";
+
+        },
+
+
+        function(error) {
+
+            if (error.code === 1) {
+
+                status.textContent =
+                    "❌ Permission denied. Please allow location access.";
+
+            }
+
+            else if (error.code === 2) {
+
+                status.textContent =
+                    "❌ Your location could not be detected.";
+
+            }
+
+            else if (error.code === 3) {
+
+                status.textContent =
+                    "❌ Location request timed out.";
+
+            }
+
+            else {
+
+                status.textContent =
+                    "❌ Unable to detect your location.";
+
+            }
+
+
+            status.className =
+                "location-status error";
+
+        },
+
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 300000
+        }
+
+    );
+
+}
+
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
+function applyFilters() {
+
+    const sport =
+        document.getElementById(
+            "sportFilter"
+        ).value.toLowerCase();
+
+
+    const location =
+        document.getElementById(
+            "locationFilter"
+        ).value.toLowerCase();
+
+
+    const priceMin =
+        parseFloat(
+            document.getElementById(
+                "priceMinFilter"
+            ).value
+        ) || 0;
+
+
+    const priceMax =
+        parseFloat(
+            document.getElementById(
+                "priceMaxFilter"
+            ).value
+        ) || 10000000;
+
+
+    const cards =
+        document.querySelectorAll(
+            ".ground-card"
+        );
+
+
+    let visibleCount = 0;
+
+
+    cards.forEach(function(card) {
+
+        const cardSport =
+            (
+                card.getAttribute(
+                    "data-sport"
+                ) || ""
+            ).toLowerCase();
+
+
+        const cardLocation =
+            (
+                card.getAttribute(
+                    "data-location"
+                ) || ""
+            ).toLowerCase();
+
+
+        const cardPrice =
+            parseFloat(
+                card.getAttribute(
+                    "data-price"
+                )
+            ) || 0;
+
+
+        const sportMatch =
+            !sport ||
+            cardSport === sport;
+
+
+        const locationMatch =
+            !location ||
+            cardLocation.includes(
+                location
+            );
+
+
+        const priceMatch =
+            cardPrice >= priceMin &&
+            cardPrice <= priceMax;
+
+
+        if (
+            sportMatch &&
+            locationMatch &&
+            priceMatch
+        ) {
+
+            card.style.display =
+                "flex";
+
+            visibleCount++;
+
+        }
+
+        else {
+
+            card.style.display =
+                "none";
+
+        }
+
+    });
+
+
+    const resultsCount =
+        document.getElementById(
+            "resultsCount"
+        );
+
+
+    if (visibleCount === 0) {
+
+        resultsCount.textContent =
+            "❌ No venues match your search";
+
+    }
+
+    else {
+
+        resultsCount.textContent =
+            `✅ Showing ${visibleCount} venue${
+                visibleCount !== 1
+                    ? "s"
+                    : ""
+            }`;
+
+    }
+
+
+    updateActiveFilters(
+        sport,
+        location,
+        priceMin,
+        priceMax
+    );
+
+}
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+function resetFilters() {
+
+    document.getElementById(
+        "sportFilter"
+    ).value = "";
+
+    document.getElementById(
+        "locationFilter"
+    ).value = "";
+
+    document.getElementById(
+        "priceMinFilter"
+    ).value = "";
+
+    document.getElementById(
+        "priceMaxFilter"
+    ).value = "";
+
+
+    document.getElementById(
+        "locationStatus"
+    ).textContent = "";
+
+
+    document.getElementById(
+        "locationStatus"
+    ).className =
+        "location-status";
+
+
+    document
+        .querySelectorAll(".ground-card")
+        .forEach(function(card) {
+
+            card.style.display =
+                "flex";
+
+        });
+
+
+    document.getElementById(
+        "resultsCount"
+    ).textContent =
+        "Showing all venues";
+
+
+    document.getElementById(
+        "activeFilters"
+    ).innerHTML = "";
+
+}
+
+
+/* ============================================================
+   ACTIVE FILTERS
+   ============================================================ */
+
+function updateActiveFilters(
+    sport,
+    location,
+    priceMin,
+    priceMax
+) {
+
+    const container =
+        document.getElementById(
+            "activeFilters"
+        );
+
+
+    const filters = [];
+
+
+    if (sport) {
+
+        filters.push(
+            `Sport: <strong>${sport}</strong>`
+        );
+
+    }
+
+
+    if (location) {
+
+        filters.push(
+            `Location: <strong>${location}</strong>`
+        );
+
+    }
+
+
+    if (priceMin > 0) {
+
+        filters.push(
+            `Min Price: <strong>₹${priceMin}</strong>`
+        );
+
+    }
+
+
+    if (priceMax < 10000000) {
+
+        filters.push(
+            `Max Price: <strong>₹${priceMax}</strong>`
+        );
+
+    }
+
+
+    container.innerHTML =
+        filters
+            .map(function(filter) {
+
+                return `
+                    <div class="filter-tag">
+                        ${filter}
+                    </div>
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+
+document
+    .getElementById("locationFilter")
+    .addEventListener(
+        "keypress",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                applyFilters();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("sportFilter")
+    .addEventListener(
+        "change",
+        applyFilters
+    );
+
+
+document
+    .getElementById("locationFilter")
+    .addEventListener(
+        "change",
+        applyFilters
+    );
+
+
+document
+    .getElementById("priceMinFilter")
+    .addEventListener(
+        "change",
+        applyFilters
+    );
+
+
+document
+    .getElementById("priceMaxFilter")
+    .addEventListener(
+        "change",
+        applyFilters
+    );
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful - TurfZone{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .success-page {
+        max-width: 700px;
+        margin: 70px auto;
+        padding: 0 20px;
+    }
+
+    .success-card {
+        background: white;
+        border-radius: 22px;
+        padding: 45px 35px;
+        text-align: center;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eee;
+    }
+
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 22px;
+        border-radius: 50%;
+        background: #e8f8ee;
+        color: #168044;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        font-weight: 800;
+    }
+
+    .success-card h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .success-message {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .booking-summary {
+        text-align: left;
+        background: #f8f8f8;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+
+    .summary-label {
+        color: #777;
+    }
+
+    .summary-value {
+        font-weight: 700;
+        text-align: right;
+    }
+
+    .amount {
+        font-size: 20px;
+    }
+
+    .payment-status {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: #e8f8ee;
+        color: #168044;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .btn-primary {
+        background: #111;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #333;
+    }
+
+    .btn-secondary {
+        background: #eee;
+        color: #222;
+    }
+
+    .btn-secondary:hover {
+        background: #ddd;
+    }
+
+    @media (max-width: 600px) {
+
+        .success-page {
+            margin: 35px auto;
+        }
+
+        .success-card {
+            padding: 35px 20px;
+        }
+
+        .success-card h1 {
+            font-size: 27px;
+        }
+
+        .summary-row {
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .summary-value {
+            text-align: left;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="success-page">
+
+    <div class="success-card">
+
+        <!-- SUCCESS ICON -->
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Payment Successful!
+        </h1>
+
+        <p class="success-message">
+            Your turf booking has been confirmed successfully.
+        </p>
+
+
+        <!-- PAYMENT STATUS -->
+
+        <div class="payment-status">
+            ✓ Payment Completed
+        </div>
+
+
+        <!-- BOOKING SUMMARY -->
+
+        <div class="booking-summary">
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Turf
+                </span>
+
+                <span class="summary-value">
+                    {{ booking.turf_name }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Sport
+                </span>
+
+                <span class="summary-value">
+                    {{ booking.sport_type }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Location
+                </span>
+
+                <span class="summary-value">
+                    {{ booking.location }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Date
+                </span>
+
+                <span class="summary-value">
+                    {{ booking.booking_date }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Time
+                </span>
+
+                <span class="summary-value">
+                    {{ booking.start_time }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Duration
+                </span>
+
+                <span class="summary-value">
+                    {{ booking.duration }}
+                    hour{% if booking.duration != 1 %}s{% endif %}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Booking ID
+                </span>
+
+                <span class="summary-value">
+                    #{{ booking.id }}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Total Paid
+                </span>
+
+                <span class="summary-value amount">
+                    ₹{{ "%.2f"|format(booking.total_price) }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+            <a
+                href="{{ url_for('my_bookings') }}"
+                class="btn btn-primary"
+            >
+                View My Bookings
+            </a>
+
+            <a
+                href="{{ url_for('ground_list') }}"
+                class="btn btn-secondary"
+            >
+                Browse More Grounds
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

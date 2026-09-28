@@ -1,0 +1,804 @@
+{% extends "base.html" %}
+
+{% block title %}Book {{ ground.name }} | TurfZone{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   BOOKING PAGE
+   ============================================================ */
+
+.booking-page {
+    max-width: 1050px;
+    margin: 40px auto;
+}
+
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #38bdf8;
+    text-decoration: none;
+
+    font-weight: 600;
+
+    margin-bottom: 25px;
+
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    color: #7dd3fc;
+    transform: translateX(-4px);
+}
+
+
+/* ============================================================
+   BOOKING GRID
+   ============================================================ */
+
+.booking-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1.15fr;
+
+    gap: 30px;
+
+    align-items: stretch;
+}
+
+
+/* ============================================================
+   TURF INFORMATION
+   ============================================================ */
+
+.turf-info-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,0.95),
+            rgba(15,23,42,0.95)
+        );
+
+    border:
+        1px solid rgba(56,189,248,0.3);
+
+    border-radius: 24px;
+
+    padding: 35px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.35);
+}
+
+.turf-info-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    top: -120px;
+    right: -100px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(56,189,248,0.2),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.sport-badge {
+
+    display: inline-block;
+
+    background:
+        rgba(56,189,248,0.15);
+
+    border:
+        1px solid rgba(56,189,248,0.5);
+
+    color: #38bdf8;
+
+    padding:
+        7px 16px;
+
+    border-radius: 30px;
+
+    font-size: 0.8rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 20px;
+}
+
+
+.turf-name {
+
+    font-size:
+        clamp(2rem, 4vw, 3rem);
+
+    line-height: 1.15;
+
+    color: #ffffff;
+
+    font-weight: 900;
+
+    margin-bottom: 18px;
+}
+
+
+.turf-location {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #94a3b8;
+
+    font-size: 1rem;
+
+    margin-bottom: 25px;
+}
+
+
+.turf-description {
+
+    color: #94a3b8;
+
+    line-height: 1.8;
+
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   PRICE
+   ============================================================ */
+
+.price-box {
+
+    padding:
+        20px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(34,197,94,0.08);
+
+    border:
+        1px solid rgba(34,197,94,0.2);
+
+}
+
+
+.price-label {
+
+    color: #94a3b8;
+
+    font-size: 0.85rem;
+
+    margin-bottom: 5px;
+}
+
+
+.price {
+
+    color: #22c55e;
+
+    font-size: 2.3rem;
+
+    font-weight: 900;
+}
+
+
+.price span {
+
+    color: #94a3b8;
+
+    font-size: 0.95rem;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   BOOKING CARD
+   ============================================================ */
+
+.booking-card {
+
+    background:
+        rgba(15,23,42,0.9);
+
+    border:
+        1px solid rgba(56,189,248,0.25);
+
+    border-radius: 24px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.35);
+}
+
+
+.booking-title {
+
+    font-size: 1.8rem;
+
+    font-weight: 800;
+
+    color: #ffffff;
+
+    margin-bottom: 8px;
+}
+
+
+.booking-subtitle {
+
+    color: #94a3b8;
+
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.booking-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.form-group label {
+
+    color: #38bdf8;
+
+    font-weight: 700;
+
+    font-size: 0.9rem;
+}
+
+
+.form-group input,
+.form-group select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(15,23,42,0.8);
+
+    border:
+        1px solid rgba(56,189,248,0.3);
+
+    color: #f8fafc;
+
+    padding:
+        14px 15px;
+
+    border-radius: 12px;
+
+    font-size: 1rem;
+
+    transition: 0.3s;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+
+    outline: none;
+
+    border-color:
+        #38bdf8;
+
+    box-shadow:
+        0 0 15px rgba(56,189,248,0.2);
+}
+
+
+.form-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+}
+
+
+/* ============================================================
+   TOTAL
+   ============================================================ */
+
+.total-box {
+
+    margin-top: 5px;
+
+    padding:
+        18px 20px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(56,189,248,0.1),
+            rgba(34,197,94,0.08)
+        );
+
+    border:
+        1px solid rgba(56,189,248,0.2);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.total-label {
+
+    color: #94a3b8;
+
+    font-weight: 600;
+}
+
+
+.total-price {
+
+    color: #22c55e;
+
+    font-size: 1.7rem;
+
+    font-weight: 900;
+}
+
+
+/* ============================================================
+   BOOK BUTTON
+   ============================================================ */
+
+.confirm-btn {
+
+    width: 100%;
+
+    border: none;
+
+    padding:
+        16px 20px;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #38bdf8,
+            #0284c7
+        );
+
+    color: white;
+
+    font-size: 1.05rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    box-shadow:
+        0 8px 25px rgba(56,189,248,0.25);
+}
+
+
+.confirm-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(56,189,248,0.4);
+}
+
+
+.confirm-btn:active {
+
+    transform:
+        scale(0.98);
+}
+
+
+/* ============================================================
+   SECURITY NOTE
+   ============================================================ */
+
+.booking-note {
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 0.8rem;
+
+    margin-top: 15px;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    .booking-page {
+
+        margin:
+            25px 15px;
+
+    }
+
+    .booking-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .form-row {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .turf-info-card,
+    .booking-card {
+
+        padding: 25px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="booking-page">
+
+    <!-- BACK -->
+
+    <a
+        href="{{ url_for('ground_list') }}"
+        class="back-link"
+    >
+        ← Back to Grounds
+    </a>
+
+
+    <div class="booking-grid">
+
+
+        <!-- ==================================================
+             TURF INFORMATION
+             ================================================== -->
+
+        <div class="turf-info-card">
+
+            <span class="sport-badge">
+                {{ ground.sport_type }}
+            </span>
+
+
+            <h1 class="turf-name">
+                {{ ground.name }}
+            </h1>
+
+
+            <div class="turf-location">
+
+                <span>📍</span>
+
+                <span>
+                    {{ ground.location }}
+                </span>
+
+            </div>
+
+
+            {% if ground.description %}
+
+                <p class="turf-description">
+                    {{ ground.description }}
+                </p>
+
+            {% else %}
+
+                <p class="turf-description">
+                    Book this premium sports facility
+                    and enjoy a great playing experience.
+                </p>
+
+            {% endif %}
+
+
+            <div class="price-box">
+
+                <div class="price-label">
+                    Starting from
+                </div>
+
+                <div class="price">
+
+                    ₹{{ ground.price_per_hour }}
+
+                    <span>
+                        / hour
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             BOOKING FORM
+             ================================================== -->
+
+        <div class="booking-card">
+
+            <h2 class="booking-title">
+                Book Your Slot
+            </h2>
+
+            <p class="booking-subtitle">
+                Select your preferred date, time and duration.
+            </p>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('create_booking', ground_id=ground.id) }}"
+                class="booking-form"
+            >
+
+
+                <!-- DATE + TIME -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="booking_date">
+                            📅 Booking Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="booking_date"
+                            name="booking_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="start_time">
+                            🕐 Start Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="start_time"
+                            name="start_time"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- DURATION -->
+
+                <div class="form-group">
+
+                    <label for="duration">
+                        ⏱️ Duration
+                    </label>
+
+                    <select
+                        id="duration"
+                        name="duration"
+                        required
+                    >
+
+                        <option value="1">
+                            1 Hour
+                        </option>
+
+                        <option value="2">
+                            2 Hours
+                        </option>
+
+                        <option value="3">
+                            3 Hours
+                        </option>
+
+                        <option value="4">
+                            4 Hours
+                        </option>
+
+                        <option value="5">
+                            5 Hours
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="total-box">
+
+                    <span class="total-label">
+                        Total Amount
+                    </span>
+
+                    <span
+                        class="total-price"
+                        id="totalPrice"
+                    >
+                        ₹{{ ground.price_per_hour }}
+                    </span>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="confirm-btn"
+                >
+                    Confirm Booking →
+                </button>
+
+
+                <div class="booking-note">
+                    🔒 Your booking details are securely stored.
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   BOOKING PRICE CALCULATOR
+   ============================================================ */
+
+const durationSelect =
+    document.getElementById("duration");
+
+const totalPrice =
+    document.getElementById("totalPrice");
+
+
+const pricePerHour =
+    {{ ground.price_per_hour | float }};
+
+
+function updateTotalPrice() {
+
+    const duration =
+        parseInt(
+            durationSelect.value
+        ) || 1;
+
+
+    const total =
+        pricePerHour * duration;
+
+
+    totalPrice.textContent =
+        "₹" + total.toFixed(2);
+
+}
+
+
+durationSelect.addEventListener(
+    "change",
+    updateTotalPrice
+);
+
+
+/* ============================================================
+   PREVENT PAST DATE
+   ============================================================ */
+
+const dateInput =
+    document.getElementById(
+        "booking_date"
+    );
+
+
+const today =
+    new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+dateInput.min = today;
+
+
+/* ============================================================
+   INITIAL PRICE
+   ============================================================ */
+
+updateTotalPrice();
+
+</script>
+
+{% endblock %}

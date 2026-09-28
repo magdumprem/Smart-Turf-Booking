@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Usage Analytics | TurfZone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .analytics-header {
+        margin-bottom: 40px;
+    }
+
+    .analytics-header h2 {
+        font-size: 2rem;
+        margin: 0 0 8px 0;
+        color: var(--text);
+    }
+
+    .analytics-header p {
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    .analytics-container {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .analytics-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .analytics-table thead {
+        background: linear-gradient(135deg, #162032 0%, #1e293b 100%);
+    }
+
+    .analytics-table th {
+        padding: 16px;
+        text-align: left;
+        color: var(--accent);
+        font-weight: 600;
+        border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .analytics-table td {
+        padding: 16px;
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .analytics-table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .analytics-table tbody tr:hover {
+        background: rgba(56, 189, 248, 0.05);
+    }
+
+    .analytics-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .badge-count {
+        background: rgba(56, 189, 248, 0.15);
+        color: var(--accent);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-state h3 {
+        color: var(--text);
+        margin: 0 0 10px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analytics-header">
+    <h2>📊 Peak Hours Analytics</h2>
+    <p>View the most booked time slots across all sports grounds</p>
+</div>
+
+{% if peak_slots %}
+    <div class="analytics-container">
+        <table class="analytics-table">
+            <thead>
+                <tr>
+                    <th>⏰ Time Slot</th>
+                    <th>📈 Total Reservations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in peak_slots %}
+                <tr>
+                    <td>{{ slot.time_slot }}</td>
+                    <td><span class="badge-count">{{ slot.total_bookings }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h3>No Analytics Data Available</h3>
+        <p>Bookings will appear here once users start reserving time slots.</p>
+    </div>
+{% endif %}
+{% endblock %}

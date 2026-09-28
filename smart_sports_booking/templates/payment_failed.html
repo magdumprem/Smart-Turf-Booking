@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Failed | TurfZone{% endblock %}
+
+{% block extra_css %}
+<style>
+    main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 200px);
+    }
+
+    .failed-container {
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+    .failed-card {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        padding: 40px;
+        border-radius: 16px;
+        border: 1px solid rgba(252, 165, 165, 0.3);
+        box-shadow: 0 8px 32px rgba(252, 165, 165, 0.1);
+    }
+
+    .failed-icon {
+        font-size: 4rem;
+        color: var(--danger);
+        margin-bottom: 20px;
+        animation: shake 0.6s ease-in-out;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+
+    .failed-card h2 {
+        color: var(--danger);
+        font-size: 2rem;
+        margin: 0 0 10px 0;
+    }
+
+    .failed-card p {
+        color: var(--text-muted);
+        margin: 0 0 30px 0;
+        font-size: 1.05rem;
+    }
+
+    .booking-details {
+        background: rgba(252, 165, 165, 0.1);
+        border: 1px solid rgba(252, 165, 165, 0.2);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 30px;
+        text-align: left;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(252, 165, 165, 0.1);
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-row strong {
+        color: var(--text);
+    }
+
+    .error-message {
+        background: rgba(220, 38, 38, 0.1);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 24px;
+        color: var(--danger);
+        text-align: left;
+    }
+
+    .error-message strong {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn-retry, .btn-cancel {
+        flex: 1;
+        padding: 14px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .btn-retry {
+        background: var(--accent);
+        color: var(--bg);
+    }
+
+    .btn-retry:hover {
+        background: var(--accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-cancel {
+        background: var(--bg-secondary);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    .btn-cancel:hover {
+        background: var(--border);
+    }
+
+    .help-section {
+        background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+        text-align: left;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .help-section h4 {
+        color: var(--warning);
+        margin: 0 0 12px 0;
+        font-size: 0.95rem;
+    }
+
+    .help-section ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .help-section li {
+        margin-bottom: 8px;
+    }
+
+    .support-link {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .support-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="failed-container">
+    <div class="failed-card">
+        <div class="failed-icon">❌</div>
+        
+        <h2>Payment Failed</h2>
+        <p>Your payment could not be processed</p>
+
+        <!-- Error Message -->
+        <div class="error-message">
+            <strong>⚠️ What Happened?</strong>
+            Your payment was declined or interrupted. Please try again with a different payment method.
+        </div>
+
+        <!-- Booking Details -->
+        <div class="booking-details">
+            <h3 style="margin: 0 0 16px 0; color: var(--text); text-align: center; font-size: 1.1rem;">Booking Details</h3>
+            
+            <div class="detail-row">
+                <span>🏟️ Ground</span>
+                <strong>{{ booking.ground.name }}</strong>
+            </div>
+            
+            <div class="detail-row">
+                <span>📅 Date</span>
+                <strong>{{ booking.booking_date }}</strong>
+            </div>
+            
+            <div class="detail-row">
+                <span>⏰ Time Slot</span>
+                <strong>{{ booking.time_slot }}</strong>
+            </div>
+            
+            <div class="detail-row">
+                <span>💰 Amount</span>
+                <strong>₹{{ (booking.total_amount / 100)|int }}</strong>
+            </div>
+            
+            <div class="detail-row">
+                <span>🔒 Payment Status</span>
+                <strong style="color: var(--danger);">✗ Failed</strong>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-section">
+            <h4>💡 Why Might This Happen?</h4>
+            <ul>
+                <li>Insufficient funds in your account</li>
+                <li>Incorrect card details</li>
+                <li>Card not enabled for online transactions</li>
+                <li>Network connectivity issue</li>
+                <li>Daily transaction limit exceeded</li>
+            </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ url_for('initiate_payment', booking_id=booking.id) }}" class="btn-retry">🔄 Retry Payment</a>
+            <a href="{{ url_for('my_bookings') }}" class="btn-cancel">Cancel Booking</a>
+        </div>
+
+        <!-- Support -->
+        <div style="margin-top: 24px; color: var(--text-muted); font-size: 0.9rem;">
+            Need help? <a href="mailto:support@turfzone.com" class="support-link">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

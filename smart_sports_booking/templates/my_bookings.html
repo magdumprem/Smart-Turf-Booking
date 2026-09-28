@@ -1,0 +1,478 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings - TurfZone{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .bookings-page {
+        max-width: 1150px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-size: 36px;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #777;
+        font-size: 16px;
+    }
+
+    .booking-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+    }
+
+    .booking-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        border: 1px solid #eee;
+        transition: 0.3s ease;
+    }
+
+    .booking-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+    }
+
+    .booking-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .booking-top h2 {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .sport {
+        margin-top: 5px;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .status {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-confirmed {
+        background: #e8f8ee;
+        color: #168044;
+    }
+
+    .status-pending {
+        background: #fff5d9;
+        color: #9a6b00;
+    }
+
+    .status-cancelled {
+        background: #ffe9e9;
+        color: #c62828;
+    }
+
+    .booking-info {
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 17px 0;
+        margin-bottom: 20px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    .info-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .info-label {
+        color: #777;
+    }
+
+    .info-value {
+        font-weight: 600;
+        text-align: right;
+    }
+
+    .price {
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .payment-box {
+        padding: 14px;
+        border-radius: 12px;
+        margin-bottom: 18px;
+    }
+
+    .payment-pending {
+        background: #fff8e6;
+        border: 1px solid #ffe1a3;
+    }
+
+    .payment-completed {
+        background: #eaf8ef;
+        border: 1px solid #bce8ca;
+    }
+
+    .payment-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .payment-text {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        border: none;
+        border-radius: 10px;
+        padding: 11px 17px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        display: inline-block;
+        transition: 0.2s ease;
+    }
+
+    .btn-pay {
+        background: #111;
+        color: white;
+    }
+
+    .btn-pay:hover {
+        background: #333;
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        background: #ffe9e9;
+        color: #c62828;
+    }
+
+    .btn-cancel:hover {
+        background: #ffd4d4;
+    }
+
+    .btn-success {
+        background: #e8f8ee;
+        color: #168044;
+        cursor: default;
+    }
+
+    .empty-state {
+        text-align: center;
+        background: white;
+        padding: 60px 20px;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+    }
+
+    .empty-icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+
+    .empty-state h2 {
+        margin-bottom: 8px;
+    }
+
+    .empty-state p {
+        color: #777;
+        margin-bottom: 20px;
+    }
+
+    .browse-btn {
+        display: inline-block;
+        padding: 12px 22px;
+        background: #111;
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+
+        .bookings-page {
+            margin: 30px auto;
+        }
+
+        .page-header h1 {
+            font-size: 29px;
+        }
+
+        .booking-top {
+            flex-direction: column;
+        }
+
+        .info-row {
+            gap: 15px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="bookings-page">
+
+    <div class="page-header">
+
+        <h1>My Bookings</h1>
+
+        <p>
+            Manage your turf bookings and payments.
+        </p>
+
+    </div>
+
+
+    {% if bookings %}
+
+        <div class="booking-grid">
+
+            {% for b in bookings %}
+
+                <div class="booking-card">
+
+                    <div class="booking-top">
+
+                        <div>
+
+                            <h2>
+                                {{ b.turf_name }}
+                            </h2>
+
+                            <div class="sport">
+                                {{ b.sport_type }} • {{ b.location }}
+                            </div>
+
+                        </div>
+
+
+                        {% if b.status == "Confirmed" %}
+
+                            <span class="status status-confirmed">
+                                Confirmed
+                            </span>
+
+                        {% elif b.status == "Pending" %}
+
+                            <span class="status status-pending">
+                                Pending
+                            </span>
+
+                        {% elif b.status == "Cancelled" %}
+
+                            <span class="status status-cancelled">
+                                Cancelled
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="booking-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Date
+                            </span>
+
+                            <span class="info-value">
+                                {{ b.booking_date }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Start Time
+                            </span>
+
+                            <span class="info-value">
+                                {{ b.start_time }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Duration
+                            </span>
+
+                            <span class="info-value">
+                                {{ b.duration }}
+                                hour{% if b.duration != 1 %}s{% endif %}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Total Amount
+                            </span>
+
+                            <span class="info-value price">
+                                ₹{{ "%.2f"|format(b.total_price) }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if b.status != "Cancelled" %}
+
+                        {% if b.payment_status == "Pending" %}
+
+                            <div class="payment-box payment-pending">
+
+                                <div class="payment-title">
+                                    💳 Payment Pending
+                                </div>
+
+                                <div class="payment-text">
+                                    Complete payment to confirm your turf booking.
+                                </div>
+
+                            </div>
+
+                        {% elif b.payment_status == "Completed" %}
+
+                            <div class="payment-box payment-completed">
+
+                                <div class="payment-title">
+                                    ✓ Payment Completed
+                                </div>
+
+                                <div class="payment-text">
+                                    Your payment has been successfully recorded.
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% endif %}
+
+
+                    <div class="actions">
+
+                        {% if b.status != "Cancelled" %}
+
+                            {% if b.payment_status == "Pending" %}
+
+                                <a
+                                    href="{{ url_for('initiate_payment', booking_id=b.id) }}"
+                                    class="btn-action btn-pay"
+                                >
+                                    💳 Pay Now
+                                </a>
+
+                            {% elif b.payment_status == "Completed" %}
+
+                                <span class="btn-action btn-success">
+                                    ✓ Paid
+                                </span>
+
+                            {% endif %}
+
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('cancel_booking', booking_id=b.id) }}"
+                                onsubmit="return confirm('Are you sure you want to cancel this booking?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="btn-action btn-cancel"
+                                >
+                                    Cancel Booking
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                🏟️
+            </div>
+
+            <h2>
+                No bookings yet
+            </h2>
+
+            <p>
+                You haven't booked any turf yet.
+            </p>
+
+            <a
+                href="{{ url_for('ground_list') }}"
+                class="browse-btn"
+            >
+                Browse Grounds
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
