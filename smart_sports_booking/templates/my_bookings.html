@@ -1,318 +1,895 @@
 {% extends "base.html" %}
 
-{% block title %}My Bookings - TurfZone{% endblock %}
+{% block title %}My Bookings | TurfZone{% endblock %}
+
 
 {% block extra_css %}
 
 <style>
 
-    .bookings-page {
-        max-width: 1150px;
-        margin: 50px auto;
-        padding: 0 20px;
-    }
+/* =========================================================
+   PAGE
+========================================================= */
 
-    .page-header {
-        margin-bottom: 30px;
-    }
+.bookings-page {
 
-    .page-header h1 {
-        font-size: 36px;
-        margin-bottom: 8px;
-    }
+    max-width: 1180px;
 
-    .page-header p {
-        color: #777;
-        font-size: 16px;
-    }
+    margin: 0 auto;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.bookings-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 28px;
+
+}
+
+
+.header-content h1 {
+
+    margin: 0 0 7px;
+
+    color: #111827;
+
+    font-size: clamp(2rem, 4vw, 2.7rem);
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+
+}
+
+
+.header-content p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 0.88rem;
+
+}
+
+
+.header-action {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 15px;
+
+    border-radius: 9px;
+
+    background: #635bff;
+
+    color: white;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 6px 16px rgba(99,91,255,0.18);
+
+    transition: 0.2s;
+
+}
+
+
+.header-action:hover {
+
+    background: #5148e5;
+
+    color: white;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================================
+   BOOKING GRID
+========================================================= */
+
+.booking-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+/* =========================================================
+   BOOKING CARD
+========================================================= */
+
+.booking-card {
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    padding: 21px;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,0.04);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+
+}
+
+
+.booking-card:hover {
+
+    transform: translateY(-3px);
+
+    border-color: #d8d4fe;
+
+    box-shadow:
+        0 14px 30px rgba(15,23,42,0.08);
+
+}
+
+
+/* =========================================================
+   TOP
+========================================================= */
+
+.booking-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 19px;
+
+}
+
+
+.turf-info {
+
+    min-width: 0;
+
+}
+
+
+.turf-icon {
+
+    width: 43px;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 11px;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f3ff,
+            #eef2ff
+        );
+
+    border: 1px solid #ede9fe;
+
+    font-size: 21px;
+
+}
+
+
+.booking-top h2 {
+
+    margin: 0 0 5px;
+
+    color: #111827;
+
+    font-size: 1.05rem;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+}
+
+
+.sport {
+
+    color: #9ca3af;
+
+    font-size: 0.73rem;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+
+    flex-shrink: 0;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+}
+
+
+.status-confirmed {
+
+    background: #ecfdf3;
+
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+
+}
+
+
+.status-pending {
+
+    background: #fffbeb;
+
+    color: #a16207;
+
+    border: 1px solid #fde68a;
+
+}
+
+
+.status-cancelled {
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+
+}
+
+
+/* =========================================================
+   BOOKING INFORMATION
+========================================================= */
+
+.booking-info {
+
+    border-top: 1px solid #f0f0f0;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    padding: 15px 0;
+
+    margin-bottom: 16px;
+
+}
+
+
+.info-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 10px;
+
+    font-size: 0.78rem;
+
+}
+
+
+.info-row:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+.info-label {
+
+    color: #9ca3af;
+
+}
+
+
+.info-value {
+
+    color: #374151;
+
+    font-weight: 650;
+
+    text-align: right;
+
+}
+
+
+.info-value.price {
+
+    color: #635bff;
+
+    font-size: 1.05rem;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   PAYMENT BOX
+========================================================= */
+
+.payment-box {
+
+    padding: 12px 13px;
+
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.payment-pending {
+
+    background: #fffbeb;
+
+    border: 1px solid #fde68a;
+
+}
+
+
+.payment-completed {
+
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+
+}
+
+
+.payment-title {
+
+    margin-bottom: 3px;
+
+    font-size: 0.76rem;
+
+    font-weight: 800;
+
+}
+
+
+.payment-pending .payment-title {
+
+    color: #a16207;
+
+}
+
+
+.payment-completed .payment-title {
+
+    color: #15803d;
+
+}
+
+
+.payment-text {
+
+    color: #6b7280;
+
+    font-size: 0.67rem;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.btn-action {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 37px;
+
+    border-radius: 8px;
+
+    padding: 8px 13px;
+
+    border: none;
+
+    font-family: inherit;
+
+    font-size: 0.72rem;
+
+    font-weight: 750;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.btn-pay {
+
+    background: #635bff;
+
+    color: white;
+
+    box-shadow:
+        0 5px 12px rgba(99,91,255,0.15);
+
+}
+
+
+.btn-pay:hover {
+
+    background: #5148e5;
+
+    color: white;
+
+    transform: translateY(-1px);
+
+}
+
+
+.btn-cancel {
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+    border: 1px solid #fecaca;
+
+}
+
+
+.btn-cancel:hover {
+
+    background: #fee2e2;
+
+}
+
+
+.btn-success {
+
+    background: #ecfdf3;
+
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+
+    cursor: default;
+
+}
+
+
+.cancel-form {
+
+    margin: 0;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+    text-align: center;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 18px;
+
+    padding: 75px 20px;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,0.04);
+
+}
+
+
+.empty-icon {
+
+    width: 68px;
+
+    height: 68px;
+
+    margin: 0 auto 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #f5f3ff;
+
+    border: 1px solid #ede9fe;
+
+    font-size: 31px;
+
+}
+
+
+.empty-state h2 {
+
+    margin: 0 0 8px;
+
+    color: #111827;
+
+    font-size: 1.35rem;
+
+    font-weight: 800;
+
+}
+
+
+.empty-state p {
+
+    color: #9ca3af;
+
+    font-size: 0.82rem;
+
+    margin: 0 0 22px;
+
+}
+
+
+.browse-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 10px 17px;
+
+    border-radius: 9px;
+
+    background: #635bff;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 0.78rem;
+
+    font-weight: 750;
+
+    transition: 0.2s;
+
+}
+
+
+.browse-btn:hover {
+
+    background: #5148e5;
+
+    color: white;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
 
     .booking-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 24px;
+
+        grid-template-columns: 1fr;
+
     }
 
-    .booking-card {
-        background: white;
-        border-radius: 18px;
-        padding: 25px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        border: 1px solid #eee;
-        transition: 0.3s ease;
+}
+
+
+@media (max-width: 600px) {
+
+    .bookings-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
     }
 
-    .booking-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+
+    .header-action {
+
+        width: 100%;
+
     }
+
 
     .booking-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 15px;
-        margin-bottom: 20px;
+
+        flex-direction: column;
+
     }
 
-    .booking-top h2 {
-        margin: 0;
-        font-size: 22px;
-    }
-
-    .sport {
-        margin-top: 5px;
-        color: #777;
-        font-size: 14px;
-    }
 
     .status {
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
+
+        align-self: flex-start;
+
     }
 
-    .status-confirmed {
-        background: #e8f8ee;
-        color: #168044;
-    }
-
-    .status-pending {
-        background: #fff5d9;
-        color: #9a6b00;
-    }
-
-    .status-cancelled {
-        background: #ffe9e9;
-        color: #c62828;
-    }
-
-    .booking-info {
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        padding: 17px 0;
-        margin-bottom: 20px;
-    }
 
     .info-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        font-size: 15px;
+
+        gap: 10px;
+
     }
 
-    .info-row:last-child {
-        margin-bottom: 0;
-    }
-
-    .info-label {
-        color: #777;
-    }
-
-    .info-value {
-        font-weight: 600;
-        text-align: right;
-    }
-
-    .price {
-        font-size: 22px;
-        font-weight: 800;
-    }
-
-    .payment-box {
-        padding: 14px;
-        border-radius: 12px;
-        margin-bottom: 18px;
-    }
-
-    .payment-pending {
-        background: #fff8e6;
-        border: 1px solid #ffe1a3;
-    }
-
-    .payment-completed {
-        background: #eaf8ef;
-        border: 1px solid #bce8ca;
-    }
-
-    .payment-title {
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-
-    .payment-text {
-        font-size: 13px;
-        color: #666;
-    }
 
     .actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+
+        flex-direction: column;
+
     }
+
 
     .btn-action {
-        border: none;
-        border-radius: 10px;
-        padding: 11px 17px;
-        font-size: 14px;
-        font-weight: 700;
-        text-decoration: none;
-        cursor: pointer;
-        display: inline-block;
-        transition: 0.2s ease;
-    }
 
-    .btn-pay {
-        background: #111;
-        color: white;
-    }
-
-    .btn-pay:hover {
-        background: #333;
-        transform: translateY(-1px);
-    }
-
-    .btn-cancel {
-        background: #ffe9e9;
-        color: #c62828;
-    }
-
-    .btn-cancel:hover {
-        background: #ffd4d4;
-    }
-
-    .btn-success {
-        background: #e8f8ee;
-        color: #168044;
-        cursor: default;
-    }
-
-    .empty-state {
-        text-align: center;
-        background: white;
-        padding: 60px 20px;
-        border-radius: 18px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-    }
-
-    .empty-icon {
-        font-size: 50px;
-        margin-bottom: 15px;
-    }
-
-    .empty-state h2 {
-        margin-bottom: 8px;
-    }
-
-    .empty-state p {
-        color: #777;
-        margin-bottom: 20px;
-    }
-
-    .browse-btn {
-        display: inline-block;
-        padding: 12px 22px;
-        background: #111;
-        color: white;
-        text-decoration: none;
-        border-radius: 10px;
-        font-weight: 700;
-    }
-
-    @media (max-width: 600px) {
-
-        .bookings-page {
-            margin: 30px auto;
-        }
-
-        .page-header h1 {
-            font-size: 29px;
-        }
-
-        .booking-top {
-            flex-direction: column;
-        }
-
-        .info-row {
-            gap: 15px;
-        }
+        width: 100%;
 
     }
+
+}
 
 </style>
 
 {% endblock %}
 
 
+
 {% block content %}
 
 <div class="bookings-page">
 
-    <div class="page-header">
 
-        <h1>My Bookings</h1>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-        <p>
-            Manage your turf bookings and payments.
-        </p>
+    <div class="bookings-header">
+
+
+        <div class="header-content">
+
+            <h1>
+                My Bookings
+            </h1>
+
+            <p>
+                Manage your turf bookings and payments.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('ground_list') }}"
+            class="header-action"
+        >
+            + Book Another Turf
+        </a>
+
 
     </div>
 
 
+
+    <!-- =====================================================
+         BOOKINGS
+    ====================================================== -->
+
     {% if bookings %}
+
 
         <div class="booking-grid">
 
+
             {% for b in bookings %}
+
 
                 <div class="booking-card">
 
+
+                    <!-- =================================================
+                         BOOKING HEADER
+                    ================================================== -->
+
                     <div class="booking-top">
 
-                        <div>
+
+                        <div class="turf-info">
+
+
+                            <div class="turf-icon">
+
+                                {% if b.sport_type == "Football" %}
+                                    ⚽
+
+                                {% elif b.sport_type == "Cricket" %}
+                                    🏏
+
+                                {% elif b.sport_type == "Badminton" %}
+                                    🏸
+
+                                {% elif b.sport_type == "Tennis" %}
+                                    🎾
+
+                                {% elif b.sport_type == "Basketball" %}
+                                    🏀
+
+                                {% elif b.sport_type == "Volleyball" %}
+                                    🏐
+
+                                {% elif b.sport_type == "Hockey" %}
+                                    🏑
+
+                                {% else %}
+                                    🏟️
+                                {% endif %}
+
+                            </div>
+
 
                             <h2>
                                 {{ b.turf_name }}
                             </h2>
 
+
                             <div class="sport">
-                                {{ b.sport_type }} • {{ b.location }}
+
+                                {{ b.sport_type }}
+                                •
+                                {{ b.location }}
+
                             </div>
+
 
                         </div>
 
 
+
+                        <!-- STATUS -->
+
                         {% if b.status == "Confirmed" %}
 
+
                             <span class="status status-confirmed">
-                                Confirmed
+
+                                ✓ Confirmed
+
                             </span>
+
 
                         {% elif b.status == "Pending" %}
 
+
                             <span class="status status-pending">
-                                Pending
+
+                                ⏳ Pending
+
                             </span>
+
 
                         {% elif b.status == "Cancelled" %}
 
+
                             <span class="status status-cancelled">
-                                Cancelled
+
+                                ✕ Cancelled
+
                             </span>
 
+
                         {% endif %}
+
 
                     </div>
 
 
+
+                    <!-- =================================================
+                         BOOKING DETAILS
+                    ================================================== -->
+
                     <div class="booking-info">
+
 
                         <div class="info-row">
 
                             <span class="info-label">
-                                Date
+                                📅 Date
                             </span>
 
                             <span class="info-value">
@@ -325,7 +902,7 @@
                         <div class="info-row">
 
                             <span class="info-label">
-                                Start Time
+                                🕐 Start Time
                             </span>
 
                             <span class="info-value">
@@ -338,12 +915,15 @@
                         <div class="info-row">
 
                             <span class="info-label">
-                                Duration
+                                ⏱️ Duration
                             </span>
 
                             <span class="info-value">
+
                                 {{ b.duration }}
+
                                 hour{% if b.duration != 1 %}s{% endif %}
+
                             </span>
 
                         </div>
@@ -356,122 +936,209 @@
                             </span>
 
                             <span class="info-value price">
+
                                 ₹{{ "%.2f"|format(b.total_price) }}
+
                             </span>
 
                         </div>
 
+
                     </div>
 
 
+
+                    <!-- =================================================
+                         PAYMENT STATUS
+                    ================================================== -->
+
                     {% if b.status != "Cancelled" %}
+
 
                         {% if b.payment_status == "Pending" %}
 
+
                             <div class="payment-box payment-pending">
 
+
                                 <div class="payment-title">
+
                                     💳 Payment Pending
+
                                 </div>
+
 
                                 <div class="payment-text">
-                                    Complete payment to confirm your turf booking.
+
+                                    Complete payment to confirm
+                                    your turf booking.
+
                                 </div>
 
+
                             </div>
+
 
                         {% elif b.payment_status == "Completed" %}
 
+
                             <div class="payment-box payment-completed">
 
+
                                 <div class="payment-title">
+
                                     ✓ Payment Completed
+
                                 </div>
 
+
                                 <div class="payment-text">
-                                    Your payment has been successfully recorded.
+
+                                    Your payment has been
+                                    successfully recorded.
+
                                 </div>
+
 
                             </div>
 
+
                         {% endif %}
+
 
                     {% endif %}
 
 
+
+                    <!-- =================================================
+                         ACTIONS
+                    ================================================== -->
+
                     <div class="actions">
+
 
                         {% if b.status != "Cancelled" %}
 
+
                             {% if b.payment_status == "Pending" %}
 
+
                                 <a
-                                    href="{{ url_for('initiate_payment', booking_id=b.id) }}"
+                                    href="{{ url_for(
+                                        'initiate_payment',
+                                        booking_id=b.id
+                                    ) }}"
                                     class="btn-action btn-pay"
                                 >
+
                                     💳 Pay Now
+
                                 </a>
+
 
                             {% elif b.payment_status == "Completed" %}
 
-                                <span class="btn-action btn-success">
+
+                                <span
+                                    class="btn-action btn-success"
+                                >
+
                                     ✓ Paid
+
                                 </span>
+
 
                             {% endif %}
 
 
+
                             <form
                                 method="POST"
-                                action="{{ url_for('cancel_booking', booking_id=b.id) }}"
-                                onsubmit="return confirm('Are you sure you want to cancel this booking?');"
+                                action="{{ url_for(
+                                    'cancel_booking',
+                                    booking_id=b.id
+                                ) }}"
+                                class="cancel-form"
+                                onsubmit="
+                                    return confirm(
+                                        'Are you sure you want to cancel this booking?'
+                                    );
+                                "
                             >
 
                                 <button
                                     type="submit"
                                     class="btn-action btn-cancel"
                                 >
+
                                     Cancel Booking
+
                                 </button>
 
                             </form>
 
+
                         {% endif %}
+
 
                     </div>
 
+
                 </div>
+
 
             {% endfor %}
 
+
         </div>
+
 
     {% else %}
 
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
         <div class="empty-state">
 
+
             <div class="empty-icon">
+
                 🏟️
+
             </div>
 
+
             <h2>
+
                 No bookings yet
+
             </h2>
 
+
             <p>
+
                 You haven't booked any turf yet.
+
             </p>
+
 
             <a
                 href="{{ url_for('ground_list') }}"
                 class="browse-btn"
             >
-                Browse Grounds
+
+                Browse Grounds →
+
             </a>
+
 
         </div>
 
+
     {% endif %}
+
 
 </div>
 

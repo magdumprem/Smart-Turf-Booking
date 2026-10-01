@@ -2,379 +2,485 @@
 
 {% block title %}Book {{ ground.name }} | TurfZone{% endblock %}
 
+
 {% block extra_css %}
 
 <style>
 
-/* ============================================================
+/* =========================================================
    BOOKING PAGE
-   ============================================================ */
+========================================================= */
 
 .booking-page {
-    max-width: 1050px;
-    margin: 40px auto;
+    max-width: 1120px;
+    margin: 0 auto;
 }
 
 
-/* ============================================================
-   BACK BUTTON
-   ============================================================ */
+/* =========================================================
+   BACK
+========================================================= */
 
 .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
 
-    color: #38bdf8;
-    text-decoration: none;
+    color: #6b7280;
 
-    font-weight: 600;
+    font-size: 0.82rem;
+    font-weight: 700;
 
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
 .back-link:hover {
-    color: #7dd3fc;
-    transform: translateX(-4px);
+    color: #635bff;
+    transform: translateX(-3px);
 }
 
 
-/* ============================================================
-   BOOKING GRID
-   ============================================================ */
+/* =========================================================
+   LAYOUT
+========================================================= */
 
 .booking-grid {
     display: grid;
 
     grid-template-columns:
-        1fr 1.15fr;
+        0.9fr
+        1.1fr;
 
-    gap: 30px;
+    gap: 22px;
 
-    align-items: stretch;
+    align-items: start;
 }
 
 
-/* ============================================================
+/* =========================================================
    TURF INFORMATION
-   ============================================================ */
+========================================================= */
 
 .turf-info-card {
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(30,41,59,0.95),
-            rgba(15,23,42,0.95)
-        );
-
-    border:
-        1px solid rgba(56,189,248,0.3);
-
-    border-radius: 24px;
-
-    padding: 35px;
-
     position: relative;
 
     overflow: hidden;
 
+    background:
+        linear-gradient(
+            145deg,
+            #111827,
+            #1f2937
+        );
+
+    border: 1px solid #374151;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    min-height: 500px;
+
+    color: white;
+
     box-shadow:
-        0 20px 50px rgba(0,0,0,0.35);
+        0 15px 35px rgba(15, 23, 42, 0.10);
 }
 
-.turf-info-card::before {
 
+.turf-info-card::before {
     content: "";
 
     position: absolute;
 
-    width: 250px;
-    height: 250px;
+    width: 260px;
+    height: 260px;
 
-    top: -120px;
     right: -100px;
+    top: -100px;
+
+    border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(56,189,248,0.2),
+            rgba(99,91,255,0.35),
             transparent 70%
         );
-
-    pointer-events: none;
 }
 
 
+.turf-info-card::after {
+    content: "⚽";
+
+    position: absolute;
+
+    right: 25px;
+    bottom: 15px;
+
+    font-size: 120px;
+
+    opacity: 0.06;
+
+    transform: rotate(-12deg);
+}
+
+
+.turf-info-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   SPORT BADGE
+========================================================= */
+
 .sport-badge {
+    display: inline-flex;
 
-    display: inline-block;
+    align-items: center;
 
-    background:
-        rgba(56,189,248,0.15);
+    padding: 6px 11px;
 
-    border:
-        1px solid rgba(56,189,248,0.5);
+    border-radius: 999px;
 
-    color: #38bdf8;
+    background: rgba(139,92,246,0.18);
 
-    padding:
-        7px 16px;
+    border: 1px solid rgba(167,139,250,0.35);
 
-    border-radius: 30px;
+    color: #c4b5fd;
 
-    font-size: 0.8rem;
+    font-size: 0.67rem;
 
     font-weight: 800;
 
     text-transform: uppercase;
 
-    letter-spacing: 1px;
+    letter-spacing: 0.6px;
 
     margin-bottom: 20px;
 }
 
 
+/* =========================================================
+   TURF NAME
+========================================================= */
+
 .turf-name {
+    position: relative;
 
     font-size:
         clamp(2rem, 4vw, 3rem);
 
-    line-height: 1.15;
+    line-height: 1.1;
 
-    color: #ffffff;
+    letter-spacing: -1.5px;
 
-    font-weight: 900;
+    font-weight: 800;
 
-    margin-bottom: 18px;
+    margin: 0 0 14px;
+
+    color: white;
 }
 
 
-.turf-location {
+/* =========================================================
+   LOCATION
+========================================================= */
 
+.turf-location {
     display: flex;
 
     align-items: center;
 
-    gap: 10px;
+    gap: 7px;
 
-    color: #94a3b8;
+    color: #d1d5db;
 
-    font-size: 1rem;
+    font-size: 0.85rem;
 
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
 
 .turf-description {
+    color: #9ca3af;
 
-    color: #94a3b8;
+    line-height: 1.7;
 
-    line-height: 1.8;
+    font-size: 0.87rem;
 
-    margin-bottom: 30px;
+    max-width: 470px;
+
+    margin-bottom: 28px;
 }
 
 
-/* ============================================================
-   PRICE
-   ============================================================ */
-
-.price-box {
-
-    padding:
-        20px;
-
-    border-radius: 16px;
-
-    background:
-        rgba(34,197,94,0.08);
-
-    border:
-        1px solid rgba(34,197,94,0.2);
-
-}
-
-
-.price-label {
-
-    color: #94a3b8;
-
-    font-size: 0.85rem;
-
-    margin-bottom: 5px;
-}
-
-
-.price {
-
-    color: #22c55e;
-
-    font-size: 2.3rem;
-
-    font-weight: 900;
-}
-
-
-.price span {
-
-    color: #94a3b8;
-
-    font-size: 0.95rem;
-
-    font-weight: 500;
-}
-
-
-/* ============================================================
-   BOOKING CARD
-   ============================================================ */
-
-.booking-card {
-
-    background:
-        rgba(15,23,42,0.9);
-
-    border:
-        1px solid rgba(56,189,248,0.25);
-
-    border-radius: 24px;
-
-    padding: 35px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,0.35);
-}
-
-
-.booking-title {
-
-    font-size: 1.8rem;
-
-    font-weight: 800;
-
-    color: #ffffff;
-
-    margin-bottom: 8px;
-}
-
-
-.booking-subtitle {
-
-    color: #94a3b8;
-
-    margin-bottom: 30px;
-}
-
-
-/* ============================================================
-   FORM
-   ============================================================ */
-
-.booking-form {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 20px;
-}
-
-
-.form-group {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-
-.form-group label {
-
-    color: #38bdf8;
-
-    font-weight: 700;
-
-    font-size: 0.9rem;
-}
-
-
-.form-group input,
-.form-group select {
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    background:
-        rgba(15,23,42,0.8);
-
-    border:
-        1px solid rgba(56,189,248,0.3);
-
-    color: #f8fafc;
-
-    padding:
-        14px 15px;
-
-    border-radius: 12px;
-
-    font-size: 1rem;
-
-    transition: 0.3s;
-}
-
-
-.form-group input:focus,
-.form-group select:focus {
-
-    outline: none;
-
-    border-color:
-        #38bdf8;
-
-    box-shadow:
-        0 0 15px rgba(56,189,248,0.2);
-}
-
-
-.form-row {
-
+/* =========================================================
+   INFO FEATURES
+========================================================= */
+
+.turf-features {
     display: grid;
 
     grid-template-columns:
         1fr 1fr;
 
-    gap: 15px;
+    gap: 9px;
+
+    margin-bottom: 28px;
 }
 
 
-/* ============================================================
+.turf-feature {
+    padding: 11px;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.05);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    color: #d1d5db;
+
+    font-size: 0.74rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.price-box {
+    position: relative;
+
+    z-index: 3;
+
+    padding: 17px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,0.06);
+
+    border: 1px solid rgba(255,255,255,0.09);
+}
+
+
+.price-label {
+    color: #9ca3af;
+
+    font-size: 0.7rem;
+
+    margin-bottom: 3px;
+}
+
+
+.price {
+    color: #a78bfa;
+
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+
+.price span {
+    color: #9ca3af;
+
+    font-size: 0.78rem;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   BOOKING CARD
+========================================================= */
+
+.booking-card {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 8px 28px rgba(15,23,42,0.05);
+}
+
+
+.booking-title {
+    color: #111827;
+
+    font-size: 1.5rem;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    margin: 0 0 5px;
+}
+
+
+.booking-subtitle {
+    color: #6b7280;
+
+    font-size: 0.82rem;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.booking-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 17px;
+}
+
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.form-group label {
+    color: #374151;
+
+    font-size: 0.76rem;
+
+    font-weight: 750;
+}
+
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    height: 45px;
+
+    box-sizing: border-box;
+
+    background: #f9fafb;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 9px;
+
+    color: #111827;
+
+    padding: 0 13px;
+
+    font-family: inherit;
+
+    font-size: 0.84rem;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: #d1d5db;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+    background: white;
+
+    border-color: #635bff;
+
+    box-shadow:
+        0 0 0 3px rgba(99,91,255,0.08);
+}
+
+
+.form-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 12px;
+}
+
+
+/* =========================================================
+   QUICK INFO
+========================================================= */
+
+.booking-info {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+
+.info-pill {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 9px;
+
+    border-radius: 7px;
+
+    background: #f5f3ff;
+
+    border: 1px solid #ede9fe;
+
+    color: #635bff;
+
+    font-size: 0.68rem;
+
+    font-weight: 650;
+}
+
+
+/* =========================================================
    TOTAL
-   ============================================================ */
+========================================================= */
 
 .total-box {
+    margin-top: 3px;
 
-    margin-top: 5px;
+    padding: 17px;
 
-    padding:
-        18px 20px;
-
-    border-radius: 14px;
+    border-radius: 12px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(56,189,248,0.1),
-            rgba(34,197,94,0.08)
+            #f5f3ff,
+            #fafafa
         );
 
-    border:
-        1px solid rgba(56,189,248,0.2);
+    border: 1px solid #e9e7ff;
 
     display: flex;
 
@@ -385,123 +491,136 @@
 
 
 .total-label {
+    color: #6b7280;
 
-    color: #94a3b8;
+    font-size: 0.78rem;
 
-    font-weight: 600;
+    font-weight: 650;
+}
+
+
+.total-subtext {
+    display: block;
+
+    color: #9ca3af;
+
+    font-size: 0.65rem;
+
+    margin-top: 2px;
 }
 
 
 .total-price {
+    color: #635bff;
 
-    color: #22c55e;
+    font-size: 1.55rem;
 
-    font-size: 1.7rem;
-
-    font-weight: 900;
+    font-weight: 800;
 }
 
 
-/* ============================================================
-   BOOK BUTTON
-   ============================================================ */
+/* =========================================================
+   CONFIRM BUTTON
+========================================================= */
 
 .confirm-btn {
-
     width: 100%;
+
+    height: 48px;
 
     border: none;
 
-    padding:
-        16px 20px;
+    border-radius: 9px;
 
-    border-radius: 13px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #38bdf8,
-            #0284c7
-        );
+    background: #635bff;
 
     color: white;
 
-    font-size: 1.05rem;
+    font-family: inherit;
 
-    font-weight: 800;
+    font-size: 0.87rem;
+
+    font-weight: 750;
 
     cursor: pointer;
 
-    transition: 0.3s;
+    transition: all 0.2s;
 
     box-shadow:
-        0 8px 25px rgba(56,189,248,0.25);
+        0 7px 18px rgba(99,91,255,0.20);
 }
 
 
 .confirm-btn:hover {
+    background: #5148e5;
 
-    transform:
-        translateY(-2px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 12px 30px rgba(56,189,248,0.4);
+        0 10px 23px rgba(99,91,255,0.27);
 }
 
 
 .confirm-btn:active {
-
-    transform:
-        scale(0.98);
+    transform: scale(0.99);
 }
 
 
-/* ============================================================
-   SECURITY NOTE
-   ============================================================ */
+/* =========================================================
+   NOTE
+========================================================= */
 
 .booking-note {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    color: #9ca3af;
+
+    font-size: 0.67rem;
 
     text-align: center;
 
-    color: #64748b;
-
-    font-size: 0.8rem;
-
-    margin-top: 15px;
+    margin-top: 2px;
 }
 
 
-/* ============================================================
-   MOBILE
-   ============================================================ */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-@media (max-width: 800px) {
-
-    .booking-page {
-
-        margin:
-            25px 15px;
-
-    }
+@media (max-width: 850px) {
 
     .booking-grid {
-
         grid-template-columns: 1fr;
+    }
 
+    .turf-info-card {
+        min-height: auto;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .booking-page {
+        padding: 0 5px;
+    }
+
+    .booking-card,
+    .turf-info-card {
+        padding: 22px;
     }
 
     .form-row {
-
         grid-template-columns: 1fr;
-
     }
 
-    .turf-info-card,
-    .booking-card {
-
-        padding: 25px;
-
+    .turf-features {
+        grid-template-columns: 1fr 1fr;
     }
 
 }
@@ -511,9 +630,11 @@
 {% endblock %}
 
 
+
 {% block content %}
 
 <div class="booking-page">
+
 
     <!-- BACK -->
 
@@ -528,88 +649,154 @@
     <div class="booking-grid">
 
 
-        <!-- ==================================================
+        <!-- =====================================================
              TURF INFORMATION
-             ================================================== -->
+        ====================================================== -->
 
-        <div class="turf-info-card">
+        <section class="turf-info-card">
 
-            <span class="sport-badge">
-                {{ ground.sport_type }}
-            </span>
+            <div class="turf-info-content">
 
 
-            <h1 class="turf-name">
-                {{ ground.name }}
-            </h1>
+                <span class="sport-badge">
 
+                    {{ ground.sport_type }}
 
-            <div class="turf-location">
-
-                <span>📍</span>
-
-                <span>
-                    {{ ground.location }}
                 </span>
 
-            </div>
+
+                <h1 class="turf-name">
+
+                    {{ ground.name }}
+
+                </h1>
 
 
-            {% if ground.description %}
+                <div class="turf-location">
 
-                <p class="turf-description">
-                    {{ ground.description }}
-                </p>
-
-            {% else %}
-
-                <p class="turf-description">
-                    Book this premium sports facility
-                    and enjoy a great playing experience.
-                </p>
-
-            {% endif %}
-
-
-            <div class="price-box">
-
-                <div class="price-label">
-                    Starting from
-                </div>
-
-                <div class="price">
-
-                    ₹{{ ground.price_per_hour }}
+                    <span>📍</span>
 
                     <span>
-                        / hour
+                        {{ ground.location }}
                     </span>
 
                 </div>
 
+
+                {% if ground.description %}
+
+                    <p class="turf-description">
+
+                        {{ ground.description }}
+
+                    </p>
+
+                {% else %}
+
+                    <p class="turf-description">
+
+                        Book this premium sports facility
+                        and enjoy a great playing experience
+                        with your friends and teammates.
+
+                    </p>
+
+                {% endif %}
+
+
+                <!-- FEATURES -->
+
+                <div class="turf-features">
+
+                    <div class="turf-feature">
+                        ⚡ Instant Booking
+                    </div>
+
+                    <div class="turf-feature">
+                        🛡️ Secure Booking
+                    </div>
+
+                    <div class="turf-feature">
+                        📍 Convenient Location
+                    </div>
+
+                    <div class="turf-feature">
+                        💳 Easy Payment
+                    </div>
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="price-box">
+
+                    <div class="price-label">
+                        Starting from
+                    </div>
+
+                    <div class="price">
+
+                        ₹{{ ground.price_per_hour }}
+
+                        <span>
+                            / hour
+                        </span>
+
+                    </div>
+
+                </div>
+
+
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- ==================================================
+
+        <!-- =====================================================
              BOOKING FORM
-             ================================================== -->
+        ====================================================== -->
 
-        <div class="booking-card">
+        <section class="booking-card">
+
 
             <h2 class="booking-title">
                 Book Your Slot
             </h2>
+
 
             <p class="booking-subtitle">
                 Select your preferred date, time and duration.
             </p>
 
 
+            <div class="booking-info">
+
+                <div class="info-pill">
+                    ✓ Real-time booking
+                </div>
+
+                <div class="info-pill">
+                    🔒 Secure
+                </div>
+
+                <div class="info-pill">
+                    💳 Pay online
+                </div>
+
+            </div>
+
+
+            <div style="height: 20px;"></div>
+
+
             <form
                 method="POST"
-                action="{{ url_for('create_booking', ground_id=ground.id) }}"
+                action="{{ url_for(
+                    'create_booking',
+                    ground_id=ground.id
+                ) }}"
                 class="booking-form"
             >
 
@@ -649,6 +836,7 @@
                         >
 
                     </div>
+
 
                 </div>
 
@@ -696,9 +884,18 @@
 
                 <div class="total-box">
 
-                    <span class="total-label">
-                        Total Amount
-                    </span>
+                    <div>
+
+                        <span class="total-label">
+                            Total Amount
+                        </span>
+
+                        <span class="total-subtext">
+                            Based on selected duration
+                        </span>
+
+                    </div>
+
 
                     <span
                         class="total-price"
@@ -721,30 +918,35 @@
 
 
                 <div class="booking-note">
+
                     🔒 Your booking details are securely stored.
+
                 </div>
+
 
             </form>
 
-        </div>
+
+        </section>
+
 
     </div>
 
 </div>
 
 
+
 <script>
 
-/* ============================================================
-   BOOKING PRICE CALCULATOR
-   ============================================================ */
+/* =========================================================
+   PRICE CALCULATOR
+========================================================= */
 
 const durationSelect =
     document.getElementById("duration");
 
 const totalPrice =
     document.getElementById("totalPrice");
-
 
 const pricePerHour =
     {{ ground.price_per_hour | float }};
@@ -757,10 +959,8 @@ function updateTotalPrice() {
             durationSelect.value
         ) || 1;
 
-
     const total =
         pricePerHour * duration;
-
 
     totalPrice.textContent =
         "₹" + total.toFixed(2);
@@ -774,9 +974,9 @@ durationSelect.addEventListener(
 );
 
 
-/* ============================================================
+/* =========================================================
    PREVENT PAST DATE
-   ============================================================ */
+========================================================= */
 
 const dateInput =
     document.getElementById(
@@ -793,9 +993,9 @@ const today =
 dateInput.min = today;
 
 
-/* ============================================================
+/* =========================================================
    INITIAL PRICE
-   ============================================================ */
+========================================================= */
 
 updateTotalPrice();
 
