@@ -704,38 +704,96 @@ def create_booking(ground_id):
 
 
         # ====================================================
-        # CHECK DUPLICATE BOOKING
+        # CHECK OVERLAPPING BOOKINGS
         #
         # Both Pending and Confirmed bookings block a slot.
+        # Example:
+        # Existing: 20:00 - 21:00
+        # New:      20:30 - 21:30  -> BLOCKED
+        # New:      21:00 - 22:00  -> ALLOWED
         # ====================================================
 
-        existing_booking = conn.execute("""
-            SELECT id
+        def time_to_minutes(time_string):
+            try:
+                hours, minutes = map(int, time_string.split(":"))
+                if hours < 0 or hours > 23 or minutes < 0 or minutes > 59:
+                    return None
+                return hours * 60 + minutes
+            except (ValueError, AttributeError):
+                return None
+
+        requested_start = time_to_minutes(start_time)
+
+        if requested_start is None:
+            conn.close()
+            flash(
+                "Invalid start time. Please select a valid time.",
+                "danger"
+            )
+            return redirect(
+                url_for(
+                    "create_booking",
+                    ground_id=ground_id
+                )
+            )
+
+        requested_end = requested_start + (duration * 60)
+
+        if requested_end > 24 * 60:
+            conn.close()
+            flash(
+                "Booking duration extends past midnight. Please choose an earlier start time.",
+                "danger"
+            )
+            return redirect(
+                url_for(
+                    "create_booking",
+                    ground_id=ground_id
+                )
+            )
+
+        existing_bookings = conn.execute("""
+            SELECT id, start_time, duration
             FROM bookings
 
             WHERE turf_id = ?
 
               AND booking_date = ?
 
-              AND start_time = ?
-
               AND status IN (
                   'Pending',
                   'Confirmed'
               )
+
+            ORDER BY start_time
         """, (
             ground_id,
-            booking_date,
-            start_time
-        )).fetchone()
+            booking_date
+        )).fetchall()
 
+        overlapping_booking = None
 
-        if existing_booking:
+        for existing in existing_bookings:
+            existing_start = time_to_minutes(existing["start_time"])
 
+            if existing_start is None:
+                continue
+
+            existing_end = existing_start + (int(existing["duration"]) * 60)
+
+            # Two time ranges overlap when:
+            # requested_start < existing_end
+            # AND requested_end > existing_start
+            if requested_start < existing_end and requested_end > existing_start:
+                overlapping_booking = existing
+                break
+
+        if overlapping_booking:
             conn.close()
 
             flash(
-                "This time slot is already booked or reserved.",
+                f"This turf is already booked from {overlapping_booking['start_time']} "
+                f"for {overlapping_booking['duration']} hour(s). Please choose another time.",
                 "danger"
             )
 
@@ -1277,6 +1335,38 @@ def api_availability():
     )).fetchall()
 
 
+    def time_to_minutes(time_string):
+        try:
+            hours, minutes = map(int, time_string.split(":"))
+            return hours * 60 + minutes
+        except (ValueError, AttributeError):
+            return None
+
+
+    def minutes_to_time(total_minutes):
+        total_minutes = total_minutes % (24 * 60)
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours:02d}:{minutes:02d}"
+
+
+    booked_slots = []
+
+    for booking in bookings:
+        start_minutes = time_to_minutes(booking["start_time"])
+
+        if start_minutes is None:
+            continue
+
+        end_minutes = start_minutes + (int(booking["duration"]) * 60)
+
+        booked_slots.append({
+            "start_time": booking["start_time"],
+            "end_time": minutes_to_time(end_minutes),
+            "duration": int(booking["duration"])
+        })
+
+
     conn.close()
 
 
@@ -1286,7 +1376,9 @@ def api_availability():
         "bookings": [
             dict(booking)
             for booking in bookings
-        ]
+        ],
+
+        "booked_slots": booked_slots
     })
 
 
