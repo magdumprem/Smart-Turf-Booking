@@ -1,132 +1,747 @@
 {% extends "base.html" %}
 
+{% block title %}Payment Successful | TurfZone{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   SUCCESS PAGE
+   ========================================================= */
+
+.success-page {
+    max-width: 1000px;
+
+    margin: 55px auto 80px;
+
+    padding: 0 22px;
+}
+
+/* =========================================================
+   SUCCESS HERO
+   ========================================================= */
+
+.success-card {
+    background: #ffffff;
+
+    border: 1px solid #e8e7ef;
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 18px 55px rgba(17, 24, 39, .07);
+
+    overflow: hidden;
+}
+
+/* Top accent */
+
+.success-accent {
+    height: 6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7654f6,
+            #9b83ff,
+            #7654f6
+        );
+}
+
+/* =========================================================
+   SUCCESS CONTENT
+   ========================================================= */
+
+.success-content {
+    text-align: center;
+
+    padding: 48px 45px 42px;
+}
+
+/* =========================================================
+   SUCCESS ICON
+   ========================================================= */
+
+.success-icon {
+    width: 82px;
+    height: 82px;
+
+    margin: 0 auto 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #ecfdf3;
+
+    border: 8px solid #f3faf6;
+
+    color: #16a34a;
+
+    font-size: 36px;
+    font-weight: 900;
+
+    animation: successPop .55s ease-out;
+}
+
+@keyframes successPop {
+
+    0% {
+        opacity: 0;
+        transform: scale(.65);
+    }
+
+    70% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+.success-content h1 {
+    margin: 0 0 10px;
+
+    color: #111827;
+
+    font-size: clamp(30px, 4vw, 43px);
+
+    font-weight: 850;
+
+    letter-spacing: -1.2px;
+}
+
+.success-message {
+    max-width: 570px;
+
+    margin: 0 auto;
+
+    color: #737783;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+/* =========================================================
+   BOOKING ID
+   ========================================================= */
+
+.booking-id {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 20px;
+
+    padding: 8px 13px;
+
+    background: #f4f1ff;
+
+    color: #6849df;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.details-section {
+    margin-top: 35px;
+
+    text-align: left;
+}
+
+.details-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 17px;
+}
+
+.details-heading-icon {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #f1edff;
+
+    font-size: 18px;
+}
+
+.details-heading h2 {
+    margin: 0;
+
+    color: #171923;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   DETAILS GRID
+   ========================================================= */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 11px;
+}
+
+.detail-box {
+    padding: 16px;
+
+    background: #fafafa;
+
+    border: 1px solid #eeeeF2;
+
+    border-radius: 15px;
+}
+
+.detail-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #92959e;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .06em;
+}
+
+.detail-value {
+    display: block;
+
+    color: #252631;
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+    word-break: break-word;
+}
+
+/* =========================================================
+   AMOUNT
+   ========================================================= */
+
+.amount-box {
+    margin-top: 14px;
+
+    padding: 19px 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: #111827;
+
+    color: white;
+
+    border-radius: 17px;
+}
+
+.amount-label {
+    color: #aeb4c1;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.amount-value {
+    font-size: 25px;
+
+    font-weight: 850;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 14px;
+}
+
+.status-box {
+    padding: 15px;
+
+    border-radius: 15px;
+
+    border: 1px solid #e8e9ed;
+
+    background: white;
+}
+
+.status-label {
+    display: block;
+
+    color: #92959e;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .06em;
+
+    margin-bottom: 7px;
+}
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: #ecfdf3;
+
+    color: #15803d;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.action-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 11px;
+
+    flex-wrap: wrap;
+
+    margin-top: 31px;
+}
+
+.success-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 150px;
+
+    padding: 13px 19px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.success-btn:hover {
+    transform: translateY(-2px);
+}
+
+.primary-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #7654f6,
+            #6040e9
+        );
+
+    color: white;
+
+    box-shadow:
+        0 8px 18px rgba(118, 84, 246, .20);
+}
+
+.primary-btn:hover {
+    color: white;
+
+    box-shadow:
+        0 12px 25px rgba(118, 84, 246, .28);
+}
+
+.secondary-btn {
+    background: white;
+
+    color: #343640;
+
+    border: 1px solid #dedee5;
+}
+
+.secondary-btn:hover {
+    color: #343640;
+
+    border-color: #c8c7d1;
+
+    box-shadow:
+        0 6px 16px rgba(20, 20, 40, .05);
+}
+
+/* =========================================================
+   FOOT NOTE
+   ========================================================= */
+
+.success-note {
+    margin-top: 22px;
+
+    color: #92959e;
+
+    font-size: 11px;
+}
+
+.success-note span {
+    margin-right: 5px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .success-page {
+        margin: 30px auto 55px;
+
+        padding: 0 15px;
+    }
+
+    .success-content {
+        padding: 38px 20px 32px;
+    }
+
+    .success-content h1 {
+        font-size: 32px;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .status-row {
+        grid-template-columns: 1fr;
+    }
+
+    .amount-box {
+        padding: 17px;
+    }
+
+    .amount-value {
+        font-size: 22px;
+    }
+
+    .success-btn {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
-<div class="container py-5">
+<div class="success-page">
 
-    <div class="row justify-content-center">
+    <div class="success-card">
 
-        <div class="col-md-7">
+        <div class="success-accent"></div>
 
-            <div class="card shadow-lg border-0 text-center">
 
-                <div class="card-body p-5">
+        <div class="success-content">
 
-                    <div
-                        class="mb-4"
-                        style="
-                            width:80px;
-                            height:80px;
-                            margin:auto;
-                            border-radius:50%;
-                            background:#198754;
-                            color:white;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            font-size:42px;
-                        "
-                    >
-                        ✓
+            <!-- =============================================
+                 SUCCESS ICON
+                 ============================================== -->
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <!-- =============================================
+                 SUCCESS MESSAGE
+                 ============================================== -->
+
+            <h1>
+                Payment Successful!
+            </h1>
+
+            <p class="success-message">
+                Your payment has been recorded and your turf
+                booking is now confirmed. Get ready to play!
+            </p>
+
+
+            <!-- BOOKING ID -->
+
+            <div class="booking-id">
+
+                🎟️
+
+                Booking #{{ booking.id }}
+
+            </div>
+
+
+            <!-- =============================================
+                 BOOKING DETAILS
+                 ============================================== -->
+
+            <div class="details-section">
+
+                <div class="details-heading">
+
+                    <div class="details-heading-icon">
+                        🏟️
                     </div>
 
-                    <h2 class="fw-bold mb-2">
-                        Payment Successful!
+                    <h2>
+                        Booking Details
                     </h2>
 
-                    <p class="text-muted mb-4">
-                        Your turf booking has been confirmed successfully.
-                    </p>
+                </div>
 
-                    <div class="card bg-light border-0 mb-4">
 
-                        <div class="card-body text-start">
+                <div class="details-grid">
 
-                            <h5 class="fw-bold mb-3">
-                                Booking Details
-                            </h5>
 
-                            <p>
-                                <strong>Booking ID:</strong>
-                                #{{ booking.id }}
-                            </p>
+                    <!-- Turf -->
 
-                            <p>
-                                <strong>Turf:</strong>
-                                {{ booking.turf_name }}
-                            </p>
+                    <div class="detail-box">
 
-                            <p>
-                                <strong>Location:</strong>
-                                {{ booking.location }}
-                            </p>
+                        <span class="detail-label">
+                            Turf
+                        </span>
 
-                            <p>
-                                <strong>Sport:</strong>
-                                {{ booking.sport_type }}
-                            </p>
-
-                            <p>
-                                <strong>Date:</strong>
-                                {{ booking.booking_date }}
-                            </p>
-
-                            <p>
-                                <strong>Start Time:</strong>
-                                {{ booking.start_time }}
-                            </p>
-
-                            <p>
-                                <strong>Duration:</strong>
-                                {{ booking.duration }} hour(s)
-                            </p>
-
-                            <p>
-                                <strong>Total Amount:</strong>
-                                ₹{{ booking.total_price }}
-                            </p>
-
-                            <hr>
-
-                            <p>
-                                <strong>Payment Status:</strong>
-
-                                <span class="badge bg-success">
-                                    {{ booking.payment_status }}
-                                </span>
-                            </p>
-
-                            <p class="mb-0">
-                                <strong>Booking Status:</strong>
-
-                                <span class="badge bg-success">
-                                    {{ booking.status }}
-                                </span>
-                            </p>
-
-                        </div>
+                        <span class="detail-value">
+                            {{ booking.turf_name }}
+                        </span>
 
                     </div>
 
-                    <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                        <a
-                            href="{{ url_for('my_bookings') }}"
-                            class="btn btn-primary"
-                        >
-                            My Bookings
-                        </a>
+                    <!-- Sport -->
 
-                        <a
-                            href="{{ url_for('ground_list') }}"
-                            class="btn btn-outline-secondary"
-                        >
-                            Browse Grounds
-                        </a>
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Sport
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.sport_type }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Location -->
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Location
+                        </span>
+
+                        <span class="detail-value">
+                            📍 {{ booking.location }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Date -->
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Date
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.booking_date }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Time -->
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Start Time
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.start_time }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Duration -->
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Duration
+                        </span>
+
+                        <span class="detail-value">
+                            {{ booking.duration }}
+                            hour{% if booking.duration != 1 %}s{% endif %}
+                        </span>
 
                     </div>
 
                 </div>
+
+
+                <!-- =========================================
+                     TOTAL AMOUNT
+                     ========================================== -->
+
+                <div class="amount-box">
+
+                    <span class="amount-label">
+                        Total Amount Paid
+                    </span>
+
+                    <span class="amount-value">
+                        ₹{{ "%.2f"|format(booking.total_price) }}
+                    </span>
+
+                </div>
+
+
+                <!-- =========================================
+                     STATUS
+                     ========================================== -->
+
+                <div class="status-row">
+
+
+                    <div class="status-box">
+
+                        <span class="status-label">
+                            Payment Status
+                        </span>
+
+                        <span class="status-badge">
+                            ✓ {{ booking.payment_status }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-box">
+
+                        <span class="status-label">
+                            Booking Status
+                        </span>
+
+                        <span class="status-badge">
+                            ✓ {{ booking.status }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 ACTION BUTTONS
+                 ============================================== -->
+
+            <div class="action-buttons">
+
+                <a
+                    href="{{ url_for('my_bookings') }}"
+                    class="success-btn primary-btn"
+                >
+                    View My Bookings →
+                </a>
+
+
+                <a
+                    href="{{ url_for('ground_list') }}"
+                    class="success-btn secondary-btn"
+                >
+                    Book Another Turf
+                </a>
+
+            </div>
+
+
+            <!-- FOOT NOTE -->
+
+            <div class="success-note">
+
+                <span>🔒</span>
+
+                Your booking details have been securely recorded.
 
             </div>
 
