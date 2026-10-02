@@ -3,123 +3,745 @@
 {% block title %}Login | TurfZone{% endblock %}
 
 {% block extra_css %}
+
 <style>
-    main {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: calc(100vh - 200px);
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.login-page {
+    min-height: calc(100vh - 190px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 55px 20px;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.login-wrapper {
+    width: 100%;
+    max-width: 950px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    background: #ffffff;
+
+    border: 1px solid #e8e7ef;
+
+    border-radius: 28px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(17, 24, 39, .08);
+}
+
+/* =========================================================
+   LEFT SIDE
+   ========================================================= */
+
+.login-visual {
+    position: relative;
+
+    min-height: 540px;
+
+    padding: 45px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(143, 119, 255, .35),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #21164f 0%,
+            #332071 50%,
+            #17122f 100%
+        );
+
+    color: white;
+}
+
+/* Decorative circles */
+
+.login-visual::before {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -100px;
+    top: -80px;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    border-radius: 50%;
+}
+
+.login-visual::after {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    left: -210px;
+    bottom: -200px;
+
+    border: 1px solid rgba(255,255,255,.10);
+
+    border-radius: 50%;
+}
+
+/* Brand */
+
+.login-brand {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 21px;
+
+    font-weight: 850;
+
+    letter-spacing: -.4px;
+}
+
+.login-brand-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.13);
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    font-size: 19px;
+}
+
+/* Main visual text */
+
+.visual-content {
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 390px;
+}
+
+.visual-content .tag {
+    display: inline-block;
+
+    margin-bottom: 17px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.10);
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    color: #dcd4ff;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+.visual-content h1 {
+    margin: 0 0 16px;
+
+    font-size: clamp(32px, 4vw, 45px);
+
+    line-height: 1.08;
+
+    letter-spacing: -1.5px;
+}
+
+.visual-content p {
+    margin: 0;
+
+    color: #c6c0d9;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+/* Feature */
+
+.visual-features {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.visual-feature {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #ded9eb;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.feature-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.10);
+
+    font-size: 14px;
+}
+
+/* =========================================================
+   RIGHT LOGIN AREA
+   ========================================================= */
+
+.login-form-section {
+    padding: 55px 45px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    background: #ffffff;
+}
+
+.login-form-header {
+    margin-bottom: 30px;
+}
+
+.login-form-header h2 {
+    margin: 0 0 8px;
+
+    color: #111827;
+
+    font-size: 29px;
+
+    font-weight: 850;
+
+    letter-spacing: -1px;
+}
+
+.login-form-header p {
+    margin: 0;
+
+    color: #858892;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #292b34;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #9699a3;
+
+    font-size: 15px;
+
+    pointer-events: none;
+}
+
+.form-group input {
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 14px 0 42px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dedee6;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #1d1f27;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.form-group input::placeholder {
+    color: #b0b2ba;
+}
+
+.form-group input:focus {
+    border-color: #7654f6;
+
+    box-shadow:
+        0 0 0 3px rgba(118,84,246,.09);
+}
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-button {
+    width: 100%;
+
+    height: 49px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7654f6,
+            #6040e9
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 9px 20px rgba(118,84,246,.20);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 13px 25px rgba(118,84,246,.28);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+/* =========================================================
+   REGISTER
+   ========================================================= */
+
+.login-footer {
+    margin-top: 25px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #eeeeF2;
+
+    text-align: center;
+
+    color: #858892;
+
+    font-size: 12px;
+}
+
+.login-footer a {
+    color: #6d4bea;
+
+    text-decoration: none;
+
+    font-weight: 800;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   SECURITY NOTE
+   ========================================================= */
+
+.login-security {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 17px;
+
+    color: #a0a2aa;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 780px) {
+
+    .login-wrapper {
+        grid-template-columns: 1fr;
+
+        max-width: 480px;
     }
 
-    .login-container {
-        width: 100%;
-        max-width: 420px;
+    .login-visual {
+        min-height: 310px;
+
+        padding: 32px;
     }
 
-    .login-card {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        padding: 40px;
-        border-radius: 16px;
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    .visual-content h1 {
+        font-size: 34px;
     }
 
-    .login-card h2 {
-        text-align: center;
-        margin: 0 0 30px 0;
-        background: linear-gradient(135deg, var(--accent) 0%, #60a5fa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+    .visual-features {
+        display: none;
     }
 
-    .form-group {
-        margin-bottom: 20px;
+    .login-form-section {
+        padding: 38px 30px 42px;
     }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: var(--text);
-        font-weight: 500;
+}
+
+@media (max-width: 500px) {
+
+    .login-page {
+        padding: 30px 15px;
     }
 
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        color: var(--text);
-        box-sizing: border-box;
-        transition: border-color 0.3s ease;
+    .login-visual {
+        min-height: 280px;
+
+        padding: 27px;
     }
 
-    .form-group input:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    .login-form-section {
+        padding: 32px 22px 35px;
     }
 
-    .login-card button {
-        width: 100%;
-        padding: 12px;
-        background: var(--accent);
-        color: var(--bg);
-        border: none;
-        border-radius: 8px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 10px;
+    .login-form-header h2 {
+        font-size: 26px;
     }
 
-    .login-card button:hover {
-        background: var(--accent-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
-    }
+}
 
-    .login-footer {
-        text-align: center;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid var(--border);
-        color: var(--text-muted);
-        font-size: 0.95rem;
-    }
-
-    .login-footer a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s ease;
-    }
-
-    .login-footer a:hover {
-        color: var(--accent-hover);
-    }
 </style>
+
 {% endblock %}
 
+
 {% block content %}
-<div class="login-container">
-    <div class="login-card">
-        <h2>Login to TurfZone</h2>
-        <form method="POST">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required placeholder="user@example.com">
+
+<div class="login-page">
+
+    <div class="login-wrapper">
+
+
+        <!-- =================================================
+             LEFT VISUAL PANEL
+             ================================================== -->
+
+        <div class="login-visual">
+
+
+            <!-- BRAND -->
+
+            <div class="login-brand">
+
+                <div class="login-brand-icon">
+                    ⚽
+                </div>
+
+                <span>
+                    TurfZone
+                </span>
+
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="••••••••">
+
+
+            <!-- MAIN MESSAGE -->
+
+            <div class="visual-content">
+
+                <div class="tag">
+                    Smart Sports Booking
+                </div>
+
+                <h1>
+                    Ready to get back on the field?
+                </h1>
+
+                <p>
+                    Sign in to manage your bookings,
+                    discover nearby grounds, and get
+                    your next game scheduled in seconds.
+                </p>
+
             </div>
-            <button type="submit">Sign In</button>
-        </form>
-        <div class="login-footer">
-            Don't have an account? <a href="{{ url_for('register') }}">Create one now</a>
+
+
+            <!-- FEATURES -->
+
+            <div class="visual-features">
+
+                <div class="visual-feature">
+
+                    <div class="feature-icon">
+                        ⚡
+                    </div>
+
+                    <span>
+                        Quick and easy booking
+                    </span>
+
+                </div>
+
+
+                <div class="visual-feature">
+
+                    <div class="feature-icon">
+                        📍
+                    </div>
+
+                    <span>
+                        Find grounds near you
+                    </span>
+
+                </div>
+
+
+                <div class="visual-feature">
+
+                    <div class="feature-icon">
+                        🔒
+                    </div>
+
+                    <span>
+                        Secure account access
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
+
+
+        <!-- =================================================
+             LOGIN FORM
+             ================================================== -->
+
+        <div class="login-form-section">
+
+
+            <div class="login-form-header">
+
+                <h2>
+                    Welcome back
+                </h2>
+
+                <p>
+                    Sign in to continue to your TurfZone account.
+                </p>
+
+            </div>
+
+
+            <form method="POST">
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🔒
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            autocomplete="current-password"
+                            placeholder="Enter your password"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    Sign In →
+                </button>
+
+
+            </form>
+
+
+            <!-- REGISTER -->
+
+            <div class="login-footer">
+
+                Don't have an account?
+
+                <a href="{{ url_for('register') }}">
+                    Create one
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="login-security">
+
+                🔒
+
+                <span>
+                    Your account information stays protected
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>
+
 {% endblock %}
