@@ -3,127 +3,797 @@
 {% block title %}Register | TurfZone{% endblock %}
 
 {% block extra_css %}
+
 <style>
-    main {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: calc(100vh - 200px);
+
+/* =========================================================
+   REGISTER PAGE
+   ========================================================= */
+
+.register-page {
+    min-height: calc(100vh - 190px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 55px 20px;
+}
+
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+
+.register-wrapper {
+    width: 100%;
+    max-width: 950px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    background: #ffffff;
+
+    border: 1px solid #e8e7ef;
+
+    border-radius: 28px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(17, 24, 39, .08);
+}
+
+/* =========================================================
+   LEFT VISUAL
+   ========================================================= */
+
+.register-visual {
+    position: relative;
+
+    min-height: 570px;
+
+    padding: 45px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 80% 15%,
+            rgba(143, 119, 255, .35),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #21164f 0%,
+            #332071 50%,
+            #17122f 100%
+        );
+
+    color: white;
+}
+
+/* Decorative circles */
+
+.register-visual::before {
+    content: "";
+
+    position: absolute;
+
+    width: 270px;
+    height: 270px;
+
+    right: -110px;
+    top: -90px;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    border-radius: 50%;
+}
+
+.register-visual::after {
+    content: "";
+
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    left: -220px;
+    bottom: -210px;
+
+    border: 1px solid rgba(255,255,255,.10);
+
+    border-radius: 50%;
+}
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.register-brand {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 21px;
+
+    font-weight: 850;
+
+    letter-spacing: -.4px;
+}
+
+.register-brand-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.13);
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    font-size: 19px;
+}
+
+/* =========================================================
+   VISUAL CONTENT
+   ========================================================= */
+
+.register-visual-content {
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 390px;
+}
+
+.register-visual-content .tag {
+    display: inline-block;
+
+    margin-bottom: 17px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.10);
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    color: #dcd4ff;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+.register-visual-content h1 {
+    margin: 0 0 16px;
+
+    font-size: clamp(32px, 4vw, 45px);
+
+    line-height: 1.08;
+
+    letter-spacing: -1.5px;
+}
+
+.register-visual-content p {
+    margin: 0;
+
+    color: #c6c0d9;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+
+.register-features {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.register-feature {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #ded9eb;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.register-feature-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.10);
+
+    font-size: 14px;
+}
+
+/* =========================================================
+   RIGHT FORM SECTION
+   ========================================================= */
+
+.register-form-section {
+    padding: 48px 45px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    background: #ffffff;
+}
+
+.register-form-header {
+    margin-bottom: 27px;
+}
+
+.register-form-header h2 {
+    margin: 0 0 8px;
+
+    color: #111827;
+
+    font-size: 29px;
+
+    font-weight: 850;
+
+    letter-spacing: -1px;
+}
+
+.register-form-header p {
+    margin: 0;
+
+    color: #858892;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.register-form-group {
+    margin-bottom: 17px;
+}
+
+.register-form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #292b34;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+.register-input-wrapper {
+    position: relative;
+}
+
+.register-input-icon {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #9699a3;
+
+    font-size: 15px;
+
+    pointer-events: none;
+}
+
+.register-form-group input {
+    width: 100%;
+
+    height: 47px;
+
+    padding: 0 14px 0 42px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dedee6;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #1d1f27;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.register-form-group input::placeholder {
+    color: #b0b2ba;
+}
+
+.register-form-group input:focus {
+    border-color: #7654f6;
+
+    box-shadow:
+        0 0 0 3px rgba(118,84,246,.09);
+}
+
+/* =========================================================
+   PASSWORD NOTE
+   ========================================================= */
+
+.password-note {
+    margin-top: 7px;
+
+    color: #9b9da5;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   REGISTER BUTTON
+   ========================================================= */
+
+.register-button {
+    width: 100%;
+
+    height: 49px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7654f6,
+            #6040e9
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 9px 20px rgba(118,84,246,.20);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 13px 25px rgba(118,84,246,.28);
+}
+
+.register-button:active {
+    transform: translateY(0);
+}
+
+/* =========================================================
+   LOGIN FOOTER
+   ========================================================= */
+
+.register-footer {
+    margin-top: 23px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #eeeeF2;
+
+    text-align: center;
+
+    color: #858892;
+
+    font-size: 12px;
+}
+
+.register-footer a {
+    color: #6d4bea;
+
+    text-decoration: none;
+
+    font-weight: 800;
+}
+
+.register-footer a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+.register-security {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 15px;
+
+    color: #a0a2aa;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 780px) {
+
+    .register-wrapper {
+        grid-template-columns: 1fr;
+
+        max-width: 480px;
     }
 
-    .register-container {
-        width: 100%;
-        max-width: 420px;
+    .register-visual {
+        min-height: 310px;
+
+        padding: 32px;
     }
 
-    .register-card {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        padding: 40px;
-        border-radius: 16px;
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    .register-visual-content h1 {
+        font-size: 34px;
     }
 
-    .register-card h2 {
-        text-align: center;
-        margin: 0 0 30px 0;
-        background: linear-gradient(135deg, var(--accent) 0%, #60a5fa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+    .register-features {
+        display: none;
     }
 
-    .form-group {
-        margin-bottom: 20px;
+    .register-form-section {
+        padding: 38px 30px 42px;
     }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: var(--text);
-        font-weight: 500;
+}
+
+@media (max-width: 500px) {
+
+    .register-page {
+        padding: 30px 15px;
     }
 
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        color: var(--text);
-        box-sizing: border-box;
-        transition: border-color 0.3s ease;
+    .register-visual {
+        min-height: 280px;
+
+        padding: 27px;
     }
 
-    .form-group input:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    .register-form-section {
+        padding: 32px 22px 35px;
     }
 
-    .register-card button {
-        width: 100%;
-        padding: 12px;
-        background: var(--accent);
-        color: var(--bg);
-        border: none;
-        border-radius: 8px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 10px;
+    .register-form-header h2 {
+        font-size: 26px;
     }
 
-    .register-card button:hover {
-        background: var(--accent-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
-    }
+}
 
-    .register-footer {
-        text-align: center;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid var(--border);
-        color: var(--text-muted);
-        font-size: 0.95rem;
-    }
-
-    .register-footer a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s ease;
-    }
-
-    .register-footer a:hover {
-        color: var(--accent-hover);
-    }
 </style>
+
 {% endblock %}
 
+
 {% block content %}
-<div class="register-container">
-    <div class="register-card">
-        <h2>Create an Account</h2>
-        <form method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="johndoe">
+
+<div class="register-page">
+
+    <div class="register-wrapper">
+
+
+        <!-- =================================================
+             LEFT VISUAL PANEL
+             ================================================== -->
+
+        <div class="register-visual">
+
+
+            <!-- BRAND -->
+
+            <div class="register-brand">
+
+                <div class="register-brand-icon">
+                    ⚽
+                </div>
+
+                <span>
+                    TurfZone
+                </span>
+
             </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required placeholder="john@example.com">
+
+
+            <!-- MAIN MESSAGE -->
+
+            <div class="register-visual-content">
+
+                <div class="tag">
+                    Join TurfZone
+                </div>
+
+                <h1>
+                    Your next game starts here.
+                </h1>
+
+                <p>
+                    Create your TurfZone account and
+                    discover, book, and manage sports
+                    grounds from one simple platform.
+                </p>
+
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="••••••••">
+
+
+            <!-- FEATURES -->
+
+            <div class="register-features">
+
+                <div class="register-feature">
+
+                    <div class="register-feature-icon">
+                        ⚡
+                    </div>
+
+                    <span>
+                        Fast and simple bookings
+                    </span>
+
+                </div>
+
+
+                <div class="register-feature">
+
+                    <div class="register-feature-icon">
+                        🏟️
+                    </div>
+
+                    <span>
+                        Multiple sports & grounds
+                    </span>
+
+                </div>
+
+
+                <div class="register-feature">
+
+                    <div class="register-feature-icon">
+                        📅
+                    </div>
+
+                    <span>
+                        Manage your bookings easily
+                    </span>
+
+                </div>
+
             </div>
-            <button type="submit">Register Account</button>
-        </form>
-        <div class="register-footer">
-            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+
         </div>
+
+
+        <!-- =================================================
+             REGISTER FORM
+             ================================================== -->
+
+        <div class="register-form-section">
+
+
+            <div class="register-form-header">
+
+                <h2>
+                    Create your account
+                </h2>
+
+                <p>
+                    Get started with TurfZone in just a few seconds.
+                </p>
+
+            </div>
+
+
+            <form method="POST">
+
+
+                <!-- USERNAME -->
+
+                <div class="register-form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            👤
+                        </span>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            required
+                            autocomplete="username"
+                            placeholder="johndoe"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="register-form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            autocomplete="email"
+                            placeholder="john@example.com"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="register-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            🔒
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            autocomplete="new-password"
+                            placeholder="Create a password"
+                        >
+
+                    </div>
+
+                    <div class="password-note">
+                        Use a password you can remember and keep secure.
+                    </div>
+
+                </div>
+
+
+                <!-- REGISTER -->
+
+                <button
+                    type="submit"
+                    class="register-button"
+                >
+                    Create Account →
+                </button>
+
+
+            </form>
+
+
+            <!-- LOGIN -->
+
+            <div class="register-footer">
+
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Sign in
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="register-security">
+
+                🔒
+
+                <span>
+                    Your account information stays protected
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>
+
 {% endblock %}
