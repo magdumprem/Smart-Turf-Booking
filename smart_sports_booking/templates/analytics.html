@@ -1,118 +1,420 @@
+
 {% extends "base.html" %}
 
-{% block title %}Usage Analytics | TurfZone{% endblock %}
+{% block title %}Peak Hours Analytics | TurfZone{% endblock %}
 
 {% block extra_css %}
 <style>
+.analytics-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px 55px;
+    color: #172033;
+}
+
+.analytics-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.analytics-title h1 {
+    margin: 0;
+    color: #172033;
+    font-size: clamp(1.7rem, 4vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+.analytics-title p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.analytics-icon {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: #635bff;
+    color: white;
+    font-size: 25px;
+    box-shadow: 0 8px 20px rgba(99, 91, 255, 0.22);
+}
+
+.chart-card,
+.data-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 26px;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+}
+
+.chart-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.chart-card-header h2,
+.data-card h2 {
+    margin: 0;
+    color: #172033;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.chart-card-header p {
+    margin: 7px 0 0;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.live-badge {
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #5145e5;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.chart-wrapper {
+    width: 100%;
+    height: 360px;
+    position: relative;
+}
+
+.empty-chart {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #64748b;
+    padding: 24px;
+}
+
+.empty-chart-icon {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: #f1efff;
+    color: #635bff;
+    font-size: 28px;
+    margin-bottom: 16px;
+}
+
+.empty-chart h3 {
+    margin: 0 0 8px;
+    color: #172033;
+    font-size: 1.05rem;
+}
+
+.empty-chart p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.analytics-table th {
+    padding: 14px 16px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.analytics-table td {
+    padding: 15px 16px;
+    color: #334155;
+    font-size: 0.87rem;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.analytics-table tbody tr:hover {
+    background: #fafaff;
+}
+
+.analytics-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.booking-count {
+    display: inline-flex;
+    min-width: 35px;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f1efff;
+    color: #5145e5;
+    font-weight: 800;
+}
+
+.demand-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.73rem;
+    font-weight: 800;
+}
+
+.demand-peak {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.demand-high {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.demand-normal {
+    color: #475569;
+    background: #f1f5f9;
+}
+
+@media (max-width: 650px) {
+    .analytics-page {
+        padding: 22px 14px 40px;
+    }
+
     .analytics-header {
-        margin-bottom: 40px;
+        align-items: flex-start;
     }
 
-    .analytics-header h2 {
-        font-size: 2rem;
-        margin: 0 0 8px 0;
-        color: var(--text);
+    .chart-card,
+    .data-card {
+        padding: 18px;
+        border-radius: 15px;
     }
 
-    .analytics-header p {
-        color: var(--text-muted);
-        margin: 0;
+    .chart-card-header {
+        flex-direction: column;
     }
 
-    .analytics-container {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    .chart-wrapper {
+        height: 300px;
     }
 
-    .analytics-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .analytics-table thead {
-        background: linear-gradient(135deg, #162032 0%, #1e293b 100%);
-    }
-
-    .analytics-table th {
-        padding: 16px;
-        text-align: left;
-        color: var(--accent);
-        font-weight: 600;
-        border-bottom: 2px solid rgba(56, 189, 248, 0.3);
-    }
-
+    .analytics-table th,
     .analytics-table td {
-        padding: 16px;
-        color: var(--text);
-        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        white-space: nowrap;
     }
-
-    .analytics-table tbody tr {
-        transition: all 0.3s ease;
-    }
-
-    .analytics-table tbody tr:hover {
-        background: rgba(56, 189, 248, 0.05);
-    }
-
-    .analytics-table tbody tr:last-child td {
-        border-bottom: none;
-    }
-
-    .badge-count {
-        background: rgba(56, 189, 248, 0.15);
-        color: var(--accent);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-        display: inline-block;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: var(--text-muted);
-    }
-
-    .empty-state h3 {
-        color: var(--text);
-        margin: 0 0 10px 0;
-    }
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="analytics-header">
-    <h2>📊 Peak Hours Analytics</h2>
-    <p>View the most booked time slots across all sports grounds</p>
+<div class="analytics-page">
+
+    <header class="analytics-header">
+        <div class="analytics-title">
+            <h1>📊 Peak Hours Analytics</h1>
+            <p>View the most booked time slots across all sports grounds.</p>
+        </div>
+        <div class="analytics-icon">📈</div>
+    </header>
+
+    <section class="chart-card">
+        <div class="chart-card-header">
+            <div>
+                <h2>Bookings by Time Slot</h2>
+                <p>Compare reservation counts to identify popular playing hours.</p>
+            </div>
+            <span class="live-badge">BOOKING DATA</span>
+        </div>
+
+        {% if peak_slots %}
+        <div class="chart-wrapper">
+            <canvas id="peakHoursChart"
+                    role="img"
+                    aria-label="Bar chart showing total bookings by time slot"></canvas>
+        </div>
+        {% else %}
+        <div class="empty-chart">
+            <div class="empty-chart-icon">📊</div>
+            <h3>No Analytics Data Available</h3>
+            <p>Booking data will appear here when bookings are recorded.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="data-card">
+        <h2>Peak Time Details</h2>
+
+        {% if peak_slots %}
+        {% set max_bookings = peak_slots | map(attribute='total_bookings') | max %}
+
+        <div class="table-wrapper">
+            <table class="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Time Slot</th>
+                        <th>Total Bookings</th>
+                        <th>Demand</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in peak_slots | sort(attribute='time_slot') %}
+                    <tr>
+                        <td>{{ slot.time_slot }}</td>
+                        <td>
+                            <span class="booking-count">
+                                {{ slot.total_bookings }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if slot.total_bookings == max_bookings %}
+                            <span class="demand-badge demand-peak">🔥 Peak</span>
+                            {% elif slot.total_bookings >= (max_bookings * 0.5) %}
+                            <span class="demand-badge demand-high">High</span>
+                            {% else %}
+                            <span class="demand-badge demand-normal">Normal</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="color:#64748b;margin:20px 0 0;">
+            No booking data available yet.
+        </p>
+        {% endif %}
+    </section>
 </div>
 
 {% if peak_slots %}
-    <div class="analytics-container">
-        <table class="analytics-table">
-            <thead>
-                <tr>
-                    <th>⏰ Time Slot</th>
-                    <th>📈 Total Reservations</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for slot in peak_slots %}
-                <tr>
-                    <td>{{ slot.time_slot }}</td>
-                    <td><span class="badge-count">{{ slot.total_bookings }}</span></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{% else %}
-    <div class="empty-state">
-        <h3>No Analytics Data Available</h3>
-        <p>Bookings will appear here once users start reserving time slots.</p>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+(function () {
+    const canvas = document.getElementById("peakHoursChart");
+    if (!canvas || typeof Chart === "undefined") return;
+
+    const labels = {{ peak_slots | sort(attribute='time_slot') | map(attribute='time_slot') | list | tojson }};
+    const values = {{ peak_slots | sort(attribute='time_slot') | map(attribute='total_bookings') | list | tojson }};
+
+    new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Total Reservations",
+                data: values,
+                backgroundColor: labels.map((_, index) =>
+                    index === values.indexOf(Math.max(...values))
+                        ? "rgba(99, 91, 255, 0.95)"
+                        : "rgba(99, 91, 255, 0.58)"
+                ),
+                borderColor: "#635bff",
+                borderWidth: 1,
+                borderRadius: 7,
+                maxBarThickness: 52
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: "index"
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: "#172033",
+                    padding: 12,
+                    callbacks: {
+                        label: function (context) {
+                            return " Reservations: " + context.parsed.y;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: "#64748b",
+                        maxRotation: 45,
+                        minRotation: 0
+                    },
+                    title: {
+                        display: true,
+                        text: "Time Slot",
+                        color: "#475569",
+                        font: {
+                            weight: "bold"
+                        }
+                    },
+                    border: {
+                        color: "#e2e8f0"
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: Math.max(...values, 1),
+                    ticks: {
+                        color: "#64748b",
+                        precision: 0,
+                        stepSize: 1
+                    },
+                    grid: {
+                        color: "#edf0f5"
+                    },
+                    title: {
+                        display: true,
+                        text: "Number of Bookings",
+                        color: "#475569",
+                        font: {
+                            weight: "bold"
+                        }
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+})();
+</script>
 {% endif %}
 {% endblock %}
