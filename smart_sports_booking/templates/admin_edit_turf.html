@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Turf - TurfZone{% endblock %}
+
+{% block content %}
+
+<style>
+    .edit-page {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 45px 20px 70px;
+    }
+
+    .edit-header {
+        margin-bottom: 28px;
+    }
+
+    .edit-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    .edit-header p {
+        color: #777;
+        margin-top: 8px;
+    }
+
+    .edit-card {
+        background: white;
+        border: 1px solid #eeeeee;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #222;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+        background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #6255f5;
+        box-shadow: 0 0 0 3px rgba(98, 85, 245, 0.10);
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: none;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: #6255f5;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #5144df;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #f2f0ff;
+        color: #5b45d0;
+    }
+
+    .btn-secondary:hover {
+        background: #e7e3ff;
+        color: #4c38bd;
+    }
+
+    .turf-id {
+        display: inline-block;
+        background: #f1efff;
+        color: #6255f5;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    @media (max-width: 650px) {
+        .edit-card {
+            padding: 22px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .form-actions .btn {
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="edit-page">
+
+    <div class="edit-header">
+
+        <span class="turf-id">
+            Turf #{{ turf["id"] }}
+        </span>
+
+        <h1>
+            Edit Turf
+        </h1>
+
+        <p>
+            Update the details of this TurfZone ground.
+        </p>
+
+    </div>
+
+
+    <div class="edit-card">
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'admin_edit_turf',
+                turf_id=turf['id']
+            ) }}"
+        >
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Turf Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="{{ turf['name'] }}"
+                    placeholder="Enter turf name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- LOCATION + SPORT -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="location">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value="{{ turf['location'] }}"
+                        placeholder="Enter location"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="sport_type">
+                        Sport Type
+                    </label>
+
+                    <select
+                        id="sport_type"
+                        name="sport_type"
+                        required
+                    >
+
+                        <option
+                            value="Football"
+                            {% if turf["sport_type"] == "Football" %}
+                                selected
+                            {% endif %}
+                        >
+                            Football
+                        </option>
+
+                        <option
+                            value="Cricket"
+                            {% if turf["sport_type"] == "Cricket" %}
+                                selected
+                            {% endif %}
+                        >
+                            Cricket
+                        </option>
+
+                        <option
+                            value="Badminton"
+                            {% if turf["sport_type"] == "Badminton" %}
+                                selected
+                            {% endif %}
+                        >
+                            Badminton
+                        </option>
+
+                        <option
+                            value="Tennis"
+                            {% if turf["sport_type"] == "Tennis" %}
+                                selected
+                            {% endif %}
+                        >
+                            Tennis
+                        </option>
+
+                        <option
+                            value="Basketball"
+                            {% if turf["sport_type"] == "Basketball" %}
+                                selected
+                            {% endif %}
+                        >
+                            Basketball
+                        </option>
+
+                        <option
+                            value="Volleyball"
+                            {% if turf["sport_type"] == "Volleyball" %}
+                                selected
+                            {% endif %}
+                        >
+                            Volleyball
+                        </option>
+
+                        <option
+                            value="Other"
+                            {% if turf["sport_type"] == "Other" %}
+                                selected
+                            {% endif %}
+                        >
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRICE -->
+
+            <div class="form-group">
+
+                <label for="price_per_hour">
+                    Price Per Hour (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="price_per_hour"
+                    name="price_per_hour"
+                    value="{{ turf['price_per_hour'] }}"
+                    min="1"
+                    step="1"
+                    placeholder="Enter price"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Enter turf description"
+                >{{ turf['description'] or '' }}</textarea>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+                <a
+                    href="{{ url_for('admin_turfs') }}"
+                    class="btn btn-secondary"
+                >
+                    ← Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Update Turf
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

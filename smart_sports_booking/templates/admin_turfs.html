@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Turfs - TurfZone{% endblock %}
+
+{% block content %}
+
+<style>
+    .admin-page {
+        padding: 40px 0 60px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    .page-header p {
+        margin: 7px 0 0;
+        color: #777;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 11px 18px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background: #6255f5;
+        color: white;
+        box-shadow: 0 6px 15px rgba(98, 85, 245, 0.2);
+    }
+
+    .btn-primary:hover {
+        background: #5144df;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #f2f0ff;
+        color: #5b45d0;
+    }
+
+    .btn-secondary:hover {
+        background: #e7e3ff;
+        color: #4c38bd;
+    }
+
+    .turf-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .turf-card {
+        background: white;
+        border: 1px solid #eeeeee;
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .turf-number {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #6255f5;
+        background: #f1efff;
+        padding: 6px 10px;
+        border-radius: 20px;
+        margin-bottom: 15px;
+    }
+
+    .turf-card h2 {
+        margin: 0 0 8px;
+        font-size: 20px;
+    }
+
+    .turf-location {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .turf-info {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .info-box {
+        flex: 1;
+        background: #f8f8fb;
+        border-radius: 10px;
+        padding: 11px;
+    }
+
+    .info-label {
+        font-size: 11px;
+        color: #888;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .turf-description {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+        min-height: 42px;
+        margin-bottom: 20px;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+    }
+
+    .edit-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .delete-form {
+        flex: 1;
+        margin: 0;
+    }
+
+    .delete-btn {
+        width: 100%;
+        background: #fff0f0;
+        color: #c62828;
+    }
+
+    .delete-btn:hover {
+        background: #ffe1e1;
+        color: #b71c1c;
+    }
+
+    .empty-state {
+        background: white;
+        border: 1px solid #eee;
+        border-radius: 18px;
+        padding: 60px 25px;
+        text-align: center;
+        color: #777;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-state h2 {
+        color: #222;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 1000px) {
+        .turf-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 650px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+        .header-actions .btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        .turf-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+<div class="container admin-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Manage Turfs</h1>
+
+            <p>
+                Add, edit and manage all TurfZone grounds.
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a
+                href="{{ url_for('admin_dashboard') }}"
+                class="btn btn-secondary"
+            >
+                ← Dashboard
+            </a>
+
+            <a
+                href="{{ url_for('admin_add_turf') }}"
+                class="btn btn-primary"
+            >
+                + Add Turf
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- TURF LIST -->
+
+    {% if turfs %}
+
+    <div class="turf-grid">
+
+        {% for turf in turfs %}
+
+        <div class="turf-card">
+
+            <span class="turf-number">
+                Turf #{{ turf["id"] }}
+            </span>
+
+
+            <h2>
+                {{ turf["name"] }}
+            </h2>
+
+
+            <div class="turf-location">
+                📍 {{ turf["location"] }}
+            </div>
+
+
+            <div class="turf-info">
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        SPORT
+                    </div>
+
+                    <div class="info-value">
+                        {{ turf["sport_type"] }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        PRICE / HOUR
+                    </div>
+
+                    <div class="info-value">
+                        ₹{{ "%.0f"|format(turf["price_per_hour"]) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="turf-description">
+
+                {% if turf["description"] %}
+
+                    {{ turf["description"] }}
+
+                {% else %}
+
+                    No description available.
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="card-actions">
+
+                <a
+                    href="{{ url_for(
+                        'admin_edit_turf',
+                        turf_id=turf['id']
+                    ) }}"
+                    class="btn btn-secondary edit-btn"
+                >
+                    Edit
+                </a>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'admin_delete_turf',
+                        turf_id=turf['id']
+                    ) }}"
+                    class="delete-form"
+                    onsubmit="return confirm(
+                        'Are you sure you want to delete this turf?'
+                    );"
+                >
+
+                    <button
+                        type="submit"
+                        class="btn delete-btn"
+                    >
+                        Delete
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <h2>No Turfs Found</h2>
+
+        <p>
+            You have not added any turfs yet.
+        </p>
+
+        <br>
+
+        <a
+            href="{{ url_for('admin_add_turf') }}"
+            class="btn btn-primary"
+        >
+            + Add Your First Turf
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

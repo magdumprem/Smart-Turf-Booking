@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Details - TurfZone{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2>Booking Details</h2>
+            <p class="text-muted">
+                Complete information about this booking.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_bookings') }}"
+            class="btn btn-secondary"
+        >
+            Back to Bookings
+        </a>
+
+    </div>
+
+
+    <!-- BOOKING INFORMATION -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">
+                Booking #{{ booking["id"] }}
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <!-- CUSTOMER -->
+
+                <div class="col-md-6">
+
+                    <h5 class="mb-3">
+                        Customer Information
+                    </h5>
+
+                    <p>
+                        <strong>Username:</strong>
+                        {{ booking["username"] }}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        {{ booking["email"] }}
+                    </p>
+
+                    <p>
+                        <strong>Phone:</strong>
+
+                        {% if booking["phone"] %}
+                            {{ booking["phone"] }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- TURF -->
+
+                <div class="col-md-6">
+
+                    <h5 class="mb-3">
+                        Turf Information
+                    </h5>
+
+                    <p>
+                        <strong>Turf:</strong>
+                        {{ booking["turf_name"] }}
+                    </p>
+
+                    <p>
+                        <strong>Location:</strong>
+                        {{ booking["location"] }}
+                    </p>
+
+                    <p>
+                        <strong>Sport:</strong>
+                        {{ booking["sport_type"] }}
+                    </p>
+
+                    <p>
+                        <strong>Price per Hour:</strong>
+                        ₹{{ booking["price_per_hour"] }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOOKING SCHEDULE -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h5 class="mb-0">
+                Booking Schedule
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <p class="text-muted mb-1">
+                        Booking Date
+                    </p>
+
+                    <h5>
+                        {{ booking["booking_date"] }}
+                    </h5>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <p class="text-muted mb-1">
+                        Start Time
+                    </p>
+
+                    <h5>
+                        {{ booking["start_time"] }}
+                    </h5>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <p class="text-muted mb-1">
+                        Duration
+                    </p>
+
+                    <h5>
+                        {{ booking["duration"] }} hour(s)
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT & STATUS -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h5 class="mb-0">
+                Payment & Status
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <p class="text-muted mb-1">
+                        Total Price
+                    </p>
+
+                    <h4>
+                        ₹{{ booking["total_price"] }}
+                    </h4>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <p class="text-muted mb-1">
+                        Booking Status
+                    </p>
+
+                    {% if booking["status"] == "Confirmed" %}
+
+                        <span class="badge bg-success fs-6">
+                            Confirmed
+                        </span>
+
+                    {% elif booking["status"] == "Cancelled" %}
+
+                        <span class="badge bg-danger fs-6">
+                            Cancelled
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark fs-6">
+                            Pending
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <p class="text-muted mb-1">
+                        Payment Status
+                    </p>
+
+                    {% if booking["payment_status"] == "Completed" %}
+
+                        <span class="badge bg-success fs-6">
+                            Completed
+                        </span>
+
+                    {% elif booking["payment_status"] == "Refunded" %}
+
+                        <span class="badge bg-danger fs-6">
+                            Refunded
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary fs-6">
+                            {{ booking["payment_status"] }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CREATED DATE -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <p class="mb-0">
+
+                <strong>Booking Created:</strong>
+
+                {{ booking["created_at"] }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="mt-4">
+
+        <a
+            href="{{ url_for('admin_bookings') }}"
+            class="btn btn-primary"
+        >
+            ← Back to Manage Bookings
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

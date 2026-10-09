@@ -1,0 +1,572 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Bookings - TurfZone{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2>Manage Bookings</h2>
+
+            <p class="text-muted">
+                View and manage all turf bookings.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="btn btn-secondary"
+        >
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if bookings %}
+
+        <!-- SEARCH & FILTER -->
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <!-- SEARCH -->
+                    <div class="col-md-5">
+
+                        <label
+                            for="bookingSearch"
+                            class="form-label fw-semibold"
+                        >
+                            🔍 Search Bookings
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bookingSearch"
+                            class="form-control"
+                            placeholder="Search customer, email, turf or booking ID..."
+                        >
+
+                    </div>
+
+
+                    <!-- DATE FILTER -->
+                    <div class="col-md-3">
+
+                        <label
+                            for="dateFilter"
+                            class="form-label fw-semibold"
+                        >
+                            📅 Booking Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="dateFilter"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS FILTER -->
+                    <div class="col-md-2">
+
+                        <label
+                            for="statusFilter"
+                            class="form-label fw-semibold"
+                        >
+                            📌 Status
+                        </label>
+
+                        <select
+                            id="statusFilter"
+                            class="form-select"
+                        >
+
+                            <option value="all">
+                                All Status
+                            </option>
+
+                            <option value="confirmed">
+                                Confirmed
+                            </option>
+
+                            <option value="pending">
+                                Pending
+                            </option>
+
+                            <option value="cancelled">
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CLEAR -->
+                    <div class="col-md-2 d-flex align-items-end">
+
+                        <button
+                            type="button"
+                            id="clearFilters"
+                            class="btn btn-outline-secondary w-100"
+                        >
+                            Clear Filters
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESULT COUNT -->
+
+                <div class="mt-3">
+
+                    <small class="text-muted">
+                        Showing
+                        <strong id="visibleCount">
+                            {{ bookings|length }}
+                        </strong>
+                        of
+                        <strong>
+                            {{ bookings|length }}
+                        </strong>
+                        bookings
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOOKINGS TABLE -->
+        <div class="table-responsive">
+
+            <table
+                class="table table-bordered table-hover align-middle"
+                id="bookingsTable"
+            >
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Turf</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Duration</th>
+                        <th>Total</th>
+                        <th>Booking Status</th>
+                        <th>Payment</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in bookings %}
+
+                    <tr
+                        class="booking-row"
+                        data-id="{{ booking['id'] }}"
+                        data-customer="{{ booking['username'] }}"
+                        data-email="{{ booking['email'] }}"
+                        data-turf="{{ booking['turf_name'] }}"
+                        data-date="{{ booking['booking_date'] }}"
+                        data-status="{{ booking['status'] }}"
+                    >
+
+                        <!-- ID -->
+
+                        <td>
+                            #{{ booking["id"] }}
+                        </td>
+
+
+                        <!-- CUSTOMER -->
+
+                        <td>
+                            {{ booking["username"] }}
+                        </td>
+
+
+                        <!-- EMAIL -->
+
+                        <td>
+                            {{ booking["email"] }}
+                        </td>
+
+
+                        <!-- TURF -->
+
+                        <td>
+                            {{ booking["turf_name"] }}
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+                            {{ booking["booking_date"] }}
+                        </td>
+
+
+                        <!-- TIME -->
+
+                        <td>
+                            {{ booking["start_time"] }}
+                        </td>
+
+
+                        <!-- DURATION -->
+
+                        <td>
+                            {{ booking["duration"] }} hour(s)
+                        </td>
+
+
+                        <!-- TOTAL -->
+
+                        <td>
+                            ₹{{ booking["total_price"] }}
+                        </td>
+
+
+                        <!-- BOOKING STATUS -->
+
+                        <td>
+
+                            {% if booking["status"] == "Confirmed" %}
+
+                                <span class="badge bg-success">
+                                    Confirmed
+                                </span>
+
+                            {% elif booking["status"] == "Cancelled" %}
+
+                                <span class="badge bg-danger">
+                                    Cancelled
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- PAYMENT STATUS -->
+
+                        <td>
+
+                            {% if booking["payment_status"] == "Completed" %}
+
+                                <span class="badge bg-success">
+                                    Completed
+                                </span>
+
+                            {% elif booking["payment_status"] == "Refunded" %}
+
+                                <span class="badge bg-danger">
+                                    Refunded
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ booking["payment_status"] }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <!-- UPDATE STATUS -->
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'admin_update_booking_status',
+                                    booking_id=booking['id']
+                                ) }}"
+                            >
+
+                                <select
+                                    name="status"
+                                    class="form-select form-select-sm mb-2"
+                                    required
+                                >
+
+                                    <option
+                                        value="Pending"
+                                        {% if booking["status"] == "Pending" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Pending
+                                    </option>
+
+
+                                    <option
+                                        value="Confirmed"
+                                        {% if booking["status"] == "Confirmed" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Confirmed
+                                    </option>
+
+
+                                    <option
+                                        value="Cancelled"
+                                        {% if booking["status"] == "Cancelled" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-sm w-100"
+                                >
+                                    Update
+                                </button>
+
+                            </form>
+
+
+                            <!-- VIEW DETAILS -->
+
+                            <a
+                                href="{{ url_for(
+                                    'admin_booking_details',
+                                    booking_id=booking['id']
+                                ) }}"
+                                class="btn btn-info btn-sm w-100 mt-2"
+                            >
+                                View Details
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- NO SEARCH RESULTS MESSAGE -->
+
+        <div
+            id="noResults"
+            class="alert alert-warning text-center mt-3"
+            style="display: none;"
+        >
+            No bookings match your search or filter.
+        </div>
+
+
+    {% else %}
+
+        <div class="alert alert-info text-center">
+            No bookings found.
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- SEARCH & FILTER JAVASCRIPT -->
+
+{% if bookings %}
+
+<script>
+
+    const searchInput = document.getElementById("bookingSearch");
+    const dateFilter = document.getElementById("dateFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const clearFilters = document.getElementById("clearFilters");
+
+    const bookingRows = document.querySelectorAll(".booking-row");
+    const visibleCount = document.getElementById("visibleCount");
+    const noResults = document.getElementById("noResults");
+
+
+    function filterBookings() {
+
+        const searchValue =
+            searchInput.value.trim().toLowerCase();
+
+        const dateValue =
+            dateFilter.value;
+
+        const statusValue =
+            statusFilter.value.toLowerCase();
+
+
+        let count = 0;
+
+
+        bookingRows.forEach(function(row) {
+
+            const id =
+                row.dataset.id.toLowerCase();
+
+            const customer =
+                row.dataset.customer.toLowerCase();
+
+            const email =
+                row.dataset.email.toLowerCase();
+
+            const turf =
+                row.dataset.turf.toLowerCase();
+
+            const date =
+                row.dataset.date;
+
+            const status =
+                row.dataset.status.toLowerCase();
+
+
+            const matchesSearch =
+                searchValue === "" ||
+                id.includes(searchValue) ||
+                customer.includes(searchValue) ||
+                email.includes(searchValue) ||
+                turf.includes(searchValue);
+
+
+            const matchesDate =
+                dateValue === "" ||
+                date === dateValue;
+
+
+            const matchesStatus =
+                statusValue === "all" ||
+                status === statusValue;
+
+
+            if (
+                matchesSearch &&
+                matchesDate &&
+                matchesStatus
+            ) {
+
+                row.style.display = "";
+                count++;
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+
+        visibleCount.textContent = count;
+
+
+        if (count === 0) {
+
+            noResults.style.display = "block";
+
+        } else {
+
+            noResults.style.display = "none";
+
+        }
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterBookings
+    );
+
+
+    dateFilter.addEventListener(
+        "change",
+        filterBookings
+    );
+
+
+    statusFilter.addEventListener(
+        "change",
+        filterBookings
+    );
+
+
+    clearFilters.addEventListener(
+        "click",
+        function() {
+
+            searchInput.value = "";
+            dateFilter.value = "";
+            statusFilter.value = "all";
+
+            filterBookings();
+
+        }
+    );
+
+</script>
+
+{% endif %}
+
+{% endblock %}
